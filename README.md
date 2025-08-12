@@ -1,358 +1,252 @@
-# March of the Legion
-## RTS Military Unit Simulator in Java
+# 🎖️ March of the Legion
 
-Development of an RTS (Real Time Strategy) troop simulator in Java that applies Object-Oriented Programming (OOP) principles for creating military units and uses sorting algorithms to organize them on a battlefield.
+> **A tactical battlefield simulation showcasing sorting algorithms through military unit formations**
 
-## Objectives
+[![Java](https://img.shields.io/badge/Java-24-orange.svg)](https://openjdk.java.net/)
+[![Maven](https://img.shields.io/badge/Maven-3.11.0-blue.svg)](https://maven.apache.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-### General Objective
-Develop a Java program that uses OOP pillars to model different types of troops and sorting algorithms to organize them on a battlefield.
+---
 
-### Specific Objectives
-- Implement classes and inheritance to model different unit types: Infantry, Sniper, Tanks, Medics, Engineers, Artillery, and Commanders
-- Apply polymorphism and encapsulation to manage actions and attributes of each troop type
-- Use data structures like matrices and lists to represent the battlefield
-- Implement at least four sorting algorithms to organize troops based on rank attributes
-- Handle exceptions and validate inputs to ensure program robustness
+## 🚀 Overview
 
-## Problem Description
+**March of the Legion** is an innovative Java application that transforms abstract sorting algorithms into a visual military battlefield simulation. Watch as different unit types reorganize themselves across the battlefield using various sorting strategies, creating an engaging way to understand algorithmic performance and behavior.
 
-Create a military troop simulator that can efficiently organize units on an N x N (or configurable) battlefield, showing how they are sorted according to different attributes using various sorting algorithms. The program must also allow random troop placement and properly manage exceptions and validations.
+### ✨ Key Features
 
-## Theoretical Framework
+- 🎯 **4 Sorting Algorithms**: Counting Sort, Radix Sort, Quick Sort, and Insertion Sort
+- ⚔️ **5 Military Unit Types**: Commander, Medic, Tank, Sniper, and Infantry
+- 🗺️ **Dynamic Battlefield**: Customizable grid sizes from 5x5 to 1000x1000
+- 🧭 **Formation Orientations**: North, South, East, and West deployment patterns
+- 📊 **Dual Display Modes**: Character symbols or numeric ranges
+- ⚡ **Performance Metrics**: Real-time execution time measurement
 
-### Object-Oriented Programming (OOP)
-- **Classes** for military units
-- **Inheritance** for subcategories (e.g., Sniper inherits from Character)
-- **Polymorphism** in actions (e.g., move() or sort())
-- **Encapsulation** of attributes (health, speed, strength, range)
+---
 
-### Data Structures
-- Lists for troop collections
-- Matrix (N x N) for the battlefield
-- Maps for parameter validation
+## 🏗️ Architecture
 
-### Sorting Algorithms
-- Implementation of at least four algorithms (Bubble Sort, Merge Sort, Insertion Sort, Quick Sort)
-- Sorting by strength attributes
+```
+src/main/java/university/jala/legion/
+├── Main.java                    # Application entry point
+├── cli/
+│   └── Parameters.java          # Command-line argument parser
+├── model/
+│   ├── Battlefield.java         # Grid management and rendering
+│   ├── Character.java           # Base unit class
+│   ├── Position.java            # Coordinate system
+│   └── units/                   # Military unit implementations
+│       ├── Commander.java       # Rank 0 - Highest priority
+│       ├── Medic.java          # Rank 1 - Medical support
+│       ├── Tank.java           # Rank 2 - Heavy armor
+│       ├── Sniper.java         # Rank 3 - Precision units
+│       └── Infantry.java       # Rank 4 - Ground troops
+└── sorting/
+    ├── SortingStrategy.java     # Strategy pattern interface
+    ├── SortingStrategyFactory.java
+    ├── CountingSort.java        # O(n + k) complexity
+    ├── RadixSort.java          # O(d × (n + k)) complexity
+    ├── QuickSort.java          # O(n log n) average case
+    └── InsertionSort.java      # O(n²) complexity
+```
 
-### Validations and Exceptions
-- Ensure proper error handling and unexpected situations
-- Argument control
+---
 
-## Project Requirements
+## 🚀 Quick Start
 
-- Troop modeling with classes and interfaces
-- Implementation of customizable attribute sorting
-- Battlefield visualization
-- CLI parameters for user input
-- Time measurement of sorting execution
-- Documented code + UML diagram
-- Git with change history
+### Prerequisites
 
-## Key Evaluation Aspects
+- ☕ **Java 24** or higher
+- 🔧 **Maven 3.8+**
 
-### 1. OOP Implementation
-- **Troop Types Creation**: Classes like Infantry, Tank, Sniper, Medic, Engineer, Artillery, and Anti-Aircraft Unit
-- **Inheritance and Polymorphism**: Base class hierarchy (Character or Troop) and child classes with different behaviors (e.g., damage or speed)
-- **Encapsulation and Abstraction**: Private attributes and public access/modification methods
-
-### 2. Sorting Algorithms
-- Implement at least four algorithms (e.g., Bubble, Insertion, Selection, MergeSort)
-- Visualize how troops reorganize
-
-### 3. Parameterization and Configuration
-- Algorithm selection using parameter `a=`
-- Input list type selection: `t=n` for number list (priority) or `t=c` for characters (types)
-- Allow sorting troops on battlefield according to their relative geographical position using parameter `o`
-- Number of units to deploy: `u=1,2,4,7,8`
-
-### 4. User Interface and Visualization
-- CLI (command line) interface or future integration with graphical UI
-- Visual display of battlefield at the beginning and end of sorting
-
-### 5. Validation and Error Control
-- Validate valid positions on the field
-- Validate that troops don't exceed battlefield boundaries
-- Handle user input errors
-- Validate that different units don't mix
-
-### 6. Iterative Development and Evaluation
-- Weekly progress reviewed by a tutor, emphasizing progressive feature implementation
-- Partial evaluations to ensure compliance with project objectives and requirements
-
-## Command Line Interface
-
-The program is executed via CLI command line with parameters:
+### Installation
 
 ```bash
-java Troops a=q t=n o=s u=1,1,4,7,10 f=10
+# Clone the repository
+git clone https://github.com/Jala-University/march-of-the-Legion.git
+cd march-of-the-Legion
+
+# Compile the project
+mvn compile
+
+# Run with sample parameters (note the correct syntax)
+mvn exec:java "-Dexec.args=a=q u=2,1,1,1,3 f=8 o=n t=c"
 ```
 
-## Parameter Meanings
+---
 
-### Algorithm Parameter (a)
-The sorting algorithm to use:
-- `"S"` or `"s"` → Selection sort
-- `"B"` or `"b"` → Bubble sort
-- `"I"` or `"i"` → Insertion sort
-- `"M"` or `"m"` → Merge sort
-- `"Q"` or `"q"` → Quick sort
-- `"H"` or `"h"` → Heap sort
-- `"C"` or `"c"` → Counting sort
-- `"R"` or `"r"` → Radix sort
+## 🎮 Usage
 
-### Type Parameter (t)
-Parameterizes the list type (numeric or character) where numbers or characters determine unit type:
+### Command Line Parameters
 
-#### Character List (`"C"` or `"c"`)
-- `a → j` → Commander
-- `k → t` → Medic
-- `u → z` continues with `A – J` → Tank
-- `K – N` → Sniper
-- `O – X` → Infantry
+| Parameter | Description | Values | Required |
+|-----------|-------------|--------|----------|
+| `a` | Sorting Algorithm | `c` (Counting), `r` (Radix), `q` (Quick), `i` (Insertion) | ✅ |
+| `u` | Unit Distribution | `commander,medic,tank,sniper,infantry` (comma-separated) | ✅ |
+| `f` | Battlefield Size | `5-1000` (creates NxN grid) | ❌ (default: 10) |
+| `o` | Formation Orientation | `n` (North), `s` (South), `e` (East), `w` (West) | ❌ (default: North) |
+| `t` | Display Type | `c` (Character), `n` (Numeric) | ❌ (default: Character) |
 
-#### Number List (`"N"` or `"n"`)
-- `n > 0 and n < 11` → Commander
-- `n > 10 and n < 21` → Medic
-- `n > 20 and n < 31` → Tank
-- `n > 30 and n < 41` → Sniper
-- `n > 40 and n < 51` → Infantry
+### Example Commands
 
-### Orientation Parameter (o)
-Allows sorting troops on battlefield according to their relative geographical position:
-- `"N"` or `"n"` → Sort from south to north
-- `"S"` or `"s"` → Sort from north to south
-- `"E"` or `"e"` → Sort from west to east
-- `"W"` or `"w"` → Sort from east to west
-
-### Units Parameter (u) - Troop Distribution by Role
-An integer array representing the number of troops per type, organized hierarchically according to their battlefield role. The index position indicates troop type, and the numeric value represents how many units of that type will be deployed.
-
-**Example structure:**
-```
-u=1,2,5,4,10
-```
-Means:
-- `u[0] = 1` → 1 Commander
-- `u[1] = 2` → 2 Medics
-- `u[2] = 5` → 5 Tanks
-- `u[3] = 4` → 4 Snipers
-- `u[4] = 10` → 10 Infantry Units
-
-### Battlefield Size Parameter (f)
-Defines battlefield dimensions as an NxN square matrix of cells.
-
-Where N is a positive integer ≥ 5 and ≤ 1000 (default is 10 if not specified).
-
-Example: `f=10` creates a 10x10 battlefield.
-
-## Random Troop Generation on Battlefield
-
-Initial troop positions will be randomly generated. The program must execute the following actions:
-
-### Random Troop Selection
-Units will be randomly selected from the available set of troop types (commander, medic, infantry, and other related elements) until reaching quantities indicated by parameter `u`. This selection must use a random number generator.
-
-### Battlefield Size Restrictions
-- Multiple infantry soldiers, medics, or commanders are allowed, but limited by field dimensions (`f`) and troop number (`u`)
-- Must not exceed total available cells (`f x f`), knowing each unit type must be on a separate line
-- Each troop type must be positioned in distinct rows to avoid mixing
-
-### Random Field Placement
-Each troop must be placed in a random position within the battlefield, represented by an `f x f` square matrix.
-
-### Position Conflict Avoidance
-The system must validate that no two troops occupy the same cell. In case of conflict, it should attempt a new random position.
-
-### Internal Field Representation
-An internal battlefield structure (matrix, list, or map) must be created to register troops and their positions.
-
-### Initial Visualization
-The initial field with randomly positioned troops must be displayed to the user through command line interface.
-
-### Object-Oriented Design (OOP)
-The entire solution must implement Object-Oriented Programming principles, including inheritance, polymorphism, encapsulation, and abstraction to model troops and battlefield.
-
-### Documentation and Metrics
-Must include UML class diagram, code documentation, and display total time elapsed for sorting troops according to chosen algorithm.
-
-## Examples
-
-### Example 1
-**Input:**
 ```bash
-java Troops a=i t=c o=s u=1,2,5,5,10 f=10
+# Quick Sort with mixed units on 12x12 battlefield
+mvn exec:java "-Dexec.args=a=q u=1,2,2,3,4 f=12 o=e t=c"
+
+# Counting Sort demo with numeric display
+mvn exec:java "-Dexec.args=a=c u=2,1,1,1,1 f=8 o=n t=n"
+
+# Large battlefield stress test
+mvn exec:java "-Dexec.args=a=r u=10,5,5,8,12 f=50 o=s t=c"
+
+# Alternative: Build JAR first, then run
+mvn clean package
+java -jar target/legion-1.0-SNAPSHOT.jar a=q u=2,1,1,1,3 f=8 o=n t=c
 ```
 
-**Output:**
+### Alternative Running Methods
+
+If you encounter issues with `mvn exec:java`, try these alternatives:
+
+**Option 1: Build and run JAR directly**
+```bash
+mvn clean compile package
+java -jar target/legion-1.0-SNAPSHOT.jar a=q u=2,1,1,1,3 f=8 o=n t=c
 ```
-Algorithm: [Insertion sort]
+
+**Option 2: Run with compiled classes**
+```bash
+mvn compile
+java -cp target/classes university.jala.legion.Main a=q u=2,1,1,1,3 f=8 o=n t=c
+```
+
+**Option 3: Using PowerShell (Windows)**
+```powershell
+mvn exec:java '-Dexec.args=a=q u=2,1,1,1,3 f=8 o=n t=c'
+```
+
+---
+
+## 📊 Sample Output
+
+```
+Algorithm: [Quick Sort]
 Type: [Character]
-Orientation: [South]
-Troops: [23]
-Battlefield: [10 x 10]
-
-Initial Position:
-* * S * * T * * * I
-I * * * * * * S * *
-* * * I * * * * M *
-* T * * * * I I * *
-* * * * C * * * * I
-I * S * * * S * T *
-* * S * * T * * * *
-* * * I * * * * I *
-* M * * * I * * * *
-S * * * * * * * T *
-
-Legend:
-C: Commander  M: Medic  T: Tank  S: Sniper
-I: Infantry   *: Empty position
-
-Final Position:
-C * * * * * * * * *
-M M * * * * * * * *
-T T T T T * * * * *
-S S S S S * * * * *
-I I I I I I I I I I
-* * * * * * * * * *
-* * * * * * * * * *
-* * * * * * * * * *
-* * * * * * * * * *
-* * * * * * * * * *
-```
-
-### Example 2
-**Input:**
-```bash
-java Troops a=q t=c o=n u=1,2,5,5,10 f=10
-```
-
-**Output:**
-```
-Algorithm: [Quick sort]
-Type: [Character]  
 Orientation: [North]
-Troops: [23]
-Battlefield: [10 x 10]
+Troops: [8]
+Battlefield: [8 x 8]
 
 Initial Position:
-* * S * * T * * * S
-I * * * * I * S * *
-* * * T * * * * M *
-* T * * * * I I * *
-* * * * C * * * * I
-I * * * * * S * T *
-* * * * * * * * * *
-* * * I * * * S I *
-* M * * S I * * * *
-* * * * * * * * T I
++----------------+
+|* * * * * * * T |
+|* C I * * * * * |
+|* * * * * * * * |
+|* * * * * * * S |
+|* * * * * I * * |
+|* I * * C * * * |
+|* * * * * M * * |
+|* * * * * * * * |
++----------------+
+
+Applying Quick Sort...
 
 Final Position:
-* * * * * * * * * *
-* * * * * * * * * *
-* * * * * * * * * *
-* * * * * * * * * *
-* * * * * * * * * *
-I I I I I I I I I I
-S S S S S * * * * *
-T T T T T * * * * *
-M M * * * * * * * *
-C * * * * * * * * *
++----------------+
+|C * * * * * * * |
+|C * * * * * * * |
+|M * * * * * * * |
+|T * * * * * * * |
+|S * * * * * * * |
+|I * * * * * * * |
+|I * * * * * * * |
+|I * * * * * * * |
++----------------+
+
+Execution time: 0ms
 ```
 
-### Example 3
-**Input:**
+---
+
+## 🎖️ Military Unit Hierarchy
+
+| Unit | Symbol | Rank | Numeric | Description |
+|------|--------|------|---------|-------------|
+| **Commander** | `C` | 0 | 1 | Strategic leadership - highest priority |
+| **Medic** | `M` | 1 | 2 | Medical support and field treatment |
+| **Tank** | `T` | 2 | 3 | Heavy armored assault units |
+| **Sniper** | `S` | 3 | 4 | Precision long-range specialists |
+| **Infantry** | `I` | 4 | 5 | Standard ground combat forces |
+
+---
+
+## ⚡ Algorithm Performance
+
+| Algorithm | Best Case | Average Case | Worst Case | Space | Stable |
+|-----------|-----------|--------------|------------|-------|--------|
+| **Counting Sort** | O(n + k) | O(n + k) | O(n + k) | O(k) | ✅ |
+| **Radix Sort** | O(d(n + k)) | O(d(n + k)) | O(d(n + k)) | O(n + k) | ✅ |
+| **Quick Sort** | O(n log n) | O(n log n) | O(n²) | O(log n) | ❌ |
+| **Insertion Sort** | O(n) | O(n²) | O(n²) | O(1) | ✅ |
+
+---
+
+## 🛠️ Development
+
+### Building from Source
+
 ```bash
-java Troops a=r t=c o=e u=1,2,5,5,10 f=6
+# Clean and compile
+mvn clean compile
+
+# Run tests
+mvn test
+
+# Create executable JAR
+mvn package
+
+# Run the JAR directly
+java -jar target/legion-1.0-SNAPSHOT.jar a=q u=1,1,1,1,1
 ```
 
-**Output:**
-```
-Algorithm: [Radix]
-Type: [Character]
-Orientation: [East]
-Troops: [23]
-Battlefield: [6 x 6]
+### Project Structure
 
-Initial Position:
-S I S I T *
-I I * S * I
-* T M T * M
-T * I I * I
-* S C * * I
-I * S * T *
+The project follows Maven standard directory layout and implements several design patterns:
 
-Final Position:
-* * * * I *
-* * T S I *
-* * T S I I
-* * T S I I
-* M T S I I
-C M T S I I
-```
+- **Strategy Pattern**: For interchangeable sorting algorithms
+- **Factory Pattern**: For creating sorting strategy instances
+- **Command Pattern**: For parameter parsing and validation
 
-### Example 4 (Size Error)
-**Input:**
-```bash
-java Troops a=c t=c o=e u=1,2,5,5,13 f=6
-```
+---
 
-**Output:**
-```
-Algorithm: [Counting sort]
-Type: [Character]
-Orientation: [East]
-Troops: [26]
-Battlefield: [6 x 6]
-Error: "invalid battlefield size"
-```
+## 🤝 Contributing
 
-**Explanation:** Should return error since battlefield is full and according to restrictions, each different unit type must be separated. In this case, only 12 infantry units would fit - there's no room for 13 infantry units as they would mix with snipers.
+We welcome contributions! Please feel free to:
 
-### Example 5
-**Input:**
-```bash
-java Troops a=r t=c o=w u=1,1,2,3,5 f=6
-```
+1. 🍴 Fork the repository
+2. 🌿 Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. 💾 Commit your changes (`git commit -m 'Add amazing feature'`)
+4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
+5. 🔄 Open a Pull Request
 
-**Output:**
-```
-Algorithm: [Radix]
-Type: [Character]
-Orientation: [West]
-Troops: [12]
-Battlefield: [6 x 6]
+---
 
-Initial Position:
-S * S * T *
-* I * * * I
-* T M * * *
-* * * I * *
-* S C * * I
-I * * * * *
+## 📜 License
 
-Final Position:
-* * * * * *
-* I * * * *
-* I * * * *
-* I S * * *
-* I S T * *
-* I S T M C
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Example 6 (Argument Error)
-**Input:**
-```bash
-java Troops a=c t=c o=ajs u=1,2,5,5,13 f=6
-```
+---
 
-**Output:**
-```
-Algorithm: [Counting sort]
-Type: [Character]
-Orientation: [invalid]
-Troops: [26]
-Battlefield: [6 x 6]
-Error: "Value of Orientation is invalid"
-```
+## 🙏 Acknowledgments
+
+- Inspired by military tactical formations and algorithmic visualization
+- Built as an educational tool for understanding sorting algorithm behavior
+- Developed using modern Java features and best practices
+
+---
+
+<div align="center">
+
+**⭐ Star this repo if you found it interesting! ⭐**
+
+Made with ❤️ by [University JALA Students](https://github.com/yourusername)
+
+</div>
