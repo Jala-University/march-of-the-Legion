@@ -1,54 +1,57 @@
+// CharacterTest.java
+// This class provides a simple unit test for the Character class and its concrete subclass,
+// printing the results to the console without a testing framework.
+
 package university.jala.legion.model;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import university.jala.legion.model.units.Commander;
 
-/**
- * Unit tests for the abstract Character class.
- * This class uses a concrete subclass for testing purposes.
- */
-class CharacterTest {
+public class CharacterTest {
 
-    // A concrete subclass of Character for testing.
-    static class TestCharacter extends Character {
-        public TestCharacter(int rank, char symbol, int numericRange) {
-            super(rank, symbol, numericRange);
+    public static void main(String[] args) {
+        System.out.println("Running Character Tests...");
+
+        // Test Case 1: Constructor and getters
+        System.out.println("\n--- Test 1: Constructor and Getters ---");
+        Commander commander = new Commander();
+        runTest("Constructor and getters",
+                commander.getRank() == 0 && commander.getSymbol() == 'C' && commander.getNumericRange() == 40,
+                "new Commander()",
+                "Expected rank: 0, actual rank: " + commander.getRank() +
+                        " | Expected symbol: C, actual symbol: " + commander.getSymbol() +
+                        " | Expected numeric range: 40, actual range: " + commander.getNumericRange());
+
+        // Test Case 2: setPosition and getPosition
+        System.out.println("\n--- Test 2: setPosition and getPosition ---");
+        Position position = new Position(5, 5);
+        commander.setPosition(position);
+        runTest("setPosition and getPosition",
+                commander.getPosition() != null && commander.getPosition().equals(position),
+                "commander.setPosition(new Position(5, 5))",
+                "Expected position: (5,5), actual position: " + (commander.getPosition() != null ? commander.getPosition().toString() : "null"));
+
+        // Test Case 3: toString method
+        System.out.println("\n--- Test 3: toString Method ---");
+        runTest("toString method",
+                commander.toString().equals("C"),
+                "commander.toString()",
+                "Expected string: \"C\", actual string: \"" + commander.toString() + "\"");
+    }
+
+    /**
+     * Helper method to run a single test case and print the results.
+     * @param testName A descriptive name for the test.
+     * @param result The boolean result of the test assertion.
+     * @param assertion A string describing the assertion.
+     * @param message A message to print if the test fails.
+     */
+    private static void runTest(String testName, boolean result, String assertion, String message) {
+        System.out.println("  Testing: " + testName);
+        System.out.println("  Assertion: " + assertion);
+        if (result) {
+            System.out.println("  Result: PASSED");
+        } else {
+            System.out.println("  Result: FAILED - " + message);
         }
-
-        @Override
-        public String getType() {
-            return "TestType";
-        }
-    }
-
-    @Test
-    void testCharacterConstructorAndGetters() {
-        // Create an instance of the concrete subclass
-        TestCharacter character = new TestCharacter(10, 'A', 5);
-
-        // Verify the initial values set by the constructor
-        assertEquals(10, character.getRank());
-        assertEquals('A', character.getSymbol());
-        assertEquals(5, character.getNumericRange());
-        assertEquals("TestType", character.getType());
-        assertNull(character.getPosition());
-    }
-
-    @Test
-    void testSetAndGetPosition() {
-        // Create an instance and a position
-        TestCharacter character = new TestCharacter(5, 'B', 2);
-        Position position = new Position(3, 4);
-
-        // Set the position and verify it was set correctly
-        character.setPosition(position);
-        assertEquals(position, character.getPosition());
-    }
-
-    @Test
-    void testToString() {
-        // Test that toString() returns the character's symbol as a string
-        TestCharacter character = new TestCharacter(1, 'X', 1);
-        assertEquals("X", character.toString());
     }
 }

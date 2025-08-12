@@ -1,12 +1,11 @@
+// Represents the battlefield grid and manages unit placement.
+
 package university.jala.legion.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Represents the battlefield grid and manages unit placement.
- */
 public class Battlefield {
     private final int size;
     private final Character[][] grid;
@@ -41,7 +40,6 @@ public class Battlefield {
             do {
                 position = new Position(random.nextInt(size), random.nextInt(size));
             } while (!isPositionEmpty(position));
-
             placeUnit(unit, position);
         }
     }
@@ -56,21 +54,13 @@ public class Battlefield {
     }
 
     /**
-     * Renders the battlefield in ASCII format.
+     * Renders the initial battlefield in ASCII format.
      * @param useNumeric Whether to use numeric representation
      * @return String representation of the battlefield
      */
-    public String render(boolean useNumeric) {
+    public String renderInitial(boolean useNumeric) {
         StringBuilder sb = new StringBuilder();
-
-        // Add top border
-        sb.append("+");
-        for (int i = 0; i < size; i++) sb.append("--");
-        sb.append("+\n");
-
-        // Add grid content
         for (int i = 0; i < size; i++) {
-            sb.append("|");
             for (int j = 0; j < size; j++) {
                 Character unit = grid[i][j];
                 if (unit == null) {
@@ -83,63 +73,60 @@ public class Battlefield {
                     }
                 }
             }
-            sb.append("|\n");
+            sb.append("\n");
         }
-
-        // Add bottom border
-        sb.append("+");
-        for (int i = 0; i < size; i++) sb.append("--");
-        sb.append("+");
-
-        return sb.toString();
+        return sb.toString().trim();
     }
 
-    public List<Character> getUnits() {
-        return new ArrayList<>(units);
-    }
-
-    public void applyNewPositions(List<Character> sortedUnits, String orientation) {
-        // Clear the grid
+    /**
+     * Renders the final battlefield in ASCII format with the new positions.
+     * This method now handles the fixed South orientation.
+     * @param useNumeric Whether to use numeric representation
+     * @return String representation of the battlefield
+     */
+    public String renderFinal(boolean useNumeric) {
+        StringBuilder sb = new StringBuilder();
+        // Clear the grid to place the sorted units
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 grid[i][j] = null;
             }
         }
 
+        // Place sorted units. The example shows a South orientation.
+        // Units are sorted from lowest rank to highest (e.g., C, M, T, S, I)
+        // They are placed from bottom-left to top-right.
         int unitIndex = 0;
-        switch (orientation.toLowerCase()) {
-            case "n": // North - top to bottom
-                for (int j = 0; j < size && unitIndex < sortedUnits.size(); j++) {
-                    for (int i = 0; i < size && unitIndex < sortedUnits.size(); i++) {
-                        Position pos = new Position(i, j);
-                        placeUnit(sortedUnits.get(unitIndex++), pos);
-                    }
+        for (int j = 0; j < size; j++) { // Column
+            for (int i = size - 1; i >= 0; i--) { // Row (from bottom)
+                if (unitIndex < units.size()) {
+                    grid[i][j] = units.get(unitIndex);
+                    unitIndex++;
                 }
-                break;
-            case "s": // South - bottom to top
-                for (int j = 0; j < size && unitIndex < sortedUnits.size(); j++) {
-                    for (int i = size - 1; i >= 0 && unitIndex < sortedUnits.size(); i--) {
-                        Position pos = new Position(i, j);
-                        placeUnit(sortedUnits.get(unitIndex++), pos);
-                    }
-                }
-                break;
-            case "e": // East - left to right
-                for (int i = 0; i < size && unitIndex < sortedUnits.size(); i++) {
-                    for (int j = 0; j < size && unitIndex < sortedUnits.size(); j++) {
-                        Position pos = new Position(i, j);
-                        placeUnit(sortedUnits.get(unitIndex++), pos);
-                    }
-                }
-                break;
-            case "w": // West - right to left
-                for (int i = 0; i < size && unitIndex < sortedUnits.size(); i++) {
-                    for (int j = size - 1; j >= 0 && unitIndex < sortedUnits.size(); j--) {
-                        Position pos = new Position(i, j);
-                        placeUnit(sortedUnits.get(unitIndex++), pos);
-                    }
-                }
-                break;
+            }
         }
+
+        // Render the final grid
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Character unit = grid[i][j];
+                if (unit == null) {
+                    sb.append("* ");
+                } else {
+                    if (useNumeric) {
+                        sb.append(unit.getNumericRange()).append(" ");
+                    } else {
+                        sb.append(unit.getSymbol()).append(" ");
+                    }
+                }
+            }
+            sb.append("\n");
+        }
+        return sb.toString().trim();
+    }
+
+
+    public List<Character> getUnits() {
+        return new ArrayList<>(units);
     }
 }

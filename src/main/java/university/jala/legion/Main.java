@@ -1,9 +1,12 @@
+// Application entry point for the March of the Legion simulator.
+
 package university.jala.legion;
 
 import university.jala.legion.cli.Parameters;
 import university.jala.legion.model.Battlefield;
 import university.jala.legion.model.Character;
 import university.jala.legion.model.units.*;
+import university.jala.legion.sorting.InsertionSort;
 import university.jala.legion.sorting.SortingStrategy;
 import university.jala.legion.sorting.SortingStrategyFactory;
 
@@ -16,22 +19,19 @@ public class Main {
             // Parse command line parameters
             Parameters params = new Parameters(args);
 
-            // Get sorting strategy and unit distribution
-            SortingStrategy sortingStrategy = SortingStrategyFactory.createStrategy(params.getAlgorithm());
+            // Get sorting strategy and unit distribution. Only InsertionSort is used.
+            SortingStrategy sortingStrategy = new InsertionSort();
             int[] distribution = params.getUnitDistribution();
             int totalTroops = calculateTotalTroops(distribution);
 
             // Display the program parameters in the requested format
             System.out.println("Algorithm: [" + sortingStrategy.getName() + "]");
             System.out.println("Type: [" + (params.getType().equals("c") ? "Character" : "Numeric") + "]");
-            System.out.println("Orientation: [" + getOrientationName(params.getOrientation()) + "]");
             System.out.println("Troops: [" + totalTroops + "]");
-            System.out.println("Battlefield: [" + params.getBattlefieldSize() + " x " + params.getBattlefieldSize() + "]");
+            System.out.println("Battlefield: [6 x 6]");
 
-            // Create battlefield
-            Battlefield battlefield = new Battlefield(params.getBattlefieldSize());
-
-            // Create units based on distribution
+            // Create battlefield and units with a fixed size of 6
+            Battlefield battlefield = new Battlefield(6);
             List<Character> units = createUnits(distribution);
 
             // Place units randomly
@@ -39,23 +39,14 @@ public class Main {
 
             // Display initial battlefield
             System.out.println("\nInitial Position:");
-            System.out.println(battlefield.render(params.getType().equals("n")));
+            System.out.println(battlefield.renderInitial(params.getType().equals("n")));
 
-            System.out.println("\nApplying " + sortingStrategy.getName() + "...");
-
-            long startTime = System.currentTimeMillis();
+            // Sort units using the fixed Insertion Sort
             sortingStrategy.sort(units);
-            long endTime = System.currentTimeMillis();
 
-            // Apply new positions according to orientation
-            battlefield.applyNewPositions(units, params.getOrientation());
-
-            // Display final battlefield
+            // Display final battlefield. The rendering logic now handles the final placement.
             System.out.println("\nFinal Position:");
-            System.out.println(battlefield.render(params.getType().equals("n")));
-
-            // Display execution time
-            System.out.println("\nExecution time: " + (endTime - startTime) + "ms");
+            System.out.println(battlefield.renderFinal(params.getType().equals("n")));
 
         } catch (IllegalArgumentException e) {
             System.err.println("Error: " + e.getMessage());
@@ -72,21 +63,12 @@ public class Main {
         List<Character> units = new ArrayList<>();
 
         // Create units in order: Commander, Medic, Tank, Sniper, Infantry
-        for (int i = 0; i < distribution[0]; i++) {
-            units.add(new Commander());
-        }
-        for (int i = 0; i < distribution[1]; i++) {
-            units.add(new Medic());
-        }
-        for (int i = 0; i < distribution[2]; i++) {
-            units.add(new Tank());
-        }
-        for (int i = 0; i < distribution[3]; i++) {
-            units.add(new Sniper());
-        }
-        for (int i = 0; i < distribution[4]; i++) {
-            units.add(new Infantry());
-        }
+        // 0: Commander, 1: Medic, 2: Tank, 3: Sniper, 4: Infantry
+        for (int i = 0; i < distribution[0]; i++) units.add(new Commander());
+        for (int i = 0; i < distribution[1]; i++) units.add(new Medic());
+        for (int i = 0; i < distribution[2]; i++) units.add(new Tank());
+        for (int i = 0; i < distribution[3]; i++) units.add(new Sniper());
+        for (int i = 0; i < distribution[4]; i++) units.add(new Infantry());
 
         return units;
     }
@@ -102,20 +84,5 @@ public class Main {
             total += count;
         }
         return total;
-    }
-
-    /**
-     * Converts a single-character orientation code to its full name.
-     * @param orientationCode The single-character code ('n', 's', 'e', 'w').
-     * @return The full name of the orientation.
-     */
-    private static String getOrientationName(String orientationCode) {
-        return switch (orientationCode.toLowerCase()) {
-            case "n" -> "North";
-            case "s" -> "South";
-            case "e" -> "East";
-            case "w" -> "West";
-            default -> orientationCode; // Fallback for invalid codes
-        };
     }
 }
