@@ -1,78 +1,121 @@
 package university.jala.legion;
 
-import university.jala.legion.core.Battlefield;
-import university.jala.legion.core.sorting.InsertionSort;
-import university.jala.legion.core.sorting.SortingAlgorithm;
-import university.jala.legion.core.trooper.Troop;
-import university.jala.legion.exception.InvalidParameterException;
-import university.jala.legion.util.CommandLineParser;
-import university.jala.legion.util.TroopGenerator;
+import university.jala.legion.cli.Parameters;
+import university.jala.legion.model.Battlefield;
+import university.jala.legion.model.Character;
+import university.jala.legion.model.units.*;
+import university.jala.legion.sorting.SortingStrategy;
+import university.jala.legion.sorting.SortingStrategyFactory;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-/**
- * Main class to run the March of the Legion application from the command line.
- * It parses CLI arguments, validates them, generates troops, sorts them, and displays the result.
- */
 public class Main {
     public static void main(String[] args) {
         try {
-            // Step 1: Parse and validate command-line arguments.
-            Map<String, String> params = CommandLineParser.parse(args);
+            // Parse command line parameters
+            Parameters params = new Parameters(args);
 
-            String algorithmParam = params.get("a");
-            String typeParam = params.get("t");
-            String unitsParam = params.get("u");
+            // Get sorting strategy and unit distribution
+            SortingStrategy sortingStrategy = SortingStrategyFactory.createStrategy(params.getAlgorithm());
+            int[] distribution = params.getUnitDistribution();
+            int totalTroops = calculateTotalTroops(distribution);
 
-            // Fixed battlefield size as per the evaluation document.
-            int battlefieldSize = 6;
+            // Display the program parameters in the requested format
+            System.out.println("Algorithm: [" + sortingStrategy.getName() + "]");
+            System.out.println("Type: [" + (params.getType().equals("c") ? "Character" : "Numeric") + "]");
+            System.out.println("Orientation: [" + getOrientationName(params.getOrientation()) + "]");
+            System.out.println("Troops: [" + totalTroops + "]");
+            System.out.println("Battlefield: [" + params.getBattlefieldSize() + " x " + params.getBattlefieldSize() + "]");
 
-            // Step 2: Generate troops based on the 'u' parameter and type.
-            List<Troop> troops = TroopGenerator.generateTroops(unitsParam, typeParam);
+            // Create battlefield
+            Battlefield battlefield = new Battlefield(params.getBattlefieldSize());
 
-            // Step 3: Create and display the initial battlefield grid.
-            Battlefield initialBattlefield = new Battlefield(battlefieldSize);
-            initialBattlefield.placeRandomly(troops);
+            // Create units based on distribution
+            List<Character> units = createUnits(distribution);
 
-            // Step 4: Print initial project progress details with updated formatting.
-            System.out.println("Algorithm: [Insertion sort]");
-            System.out.println("Type: [" + (typeParam.equals("c") ? "Character" : "Number") + "]");
-            // This is hardcoded to match the example output, which shows 23 troops,
-            // even though the generated troop count is 24 to match the grid.
-            System.out.println("Troops: [23]");
-            System.out.println("Battlefield: [" + battlefieldSize + " x " + battlefieldSize + "]");
-            System.out.println();
-            System.out.println("Initial Position:");
-            initialBattlefield.display();
-            System.out.println();
+            // Place units randomly
+            battlefield.placeUnitsRandomly(units);
 
-            // Step 5: Sort the troops using the specified algorithm.
-            SortingAlgorithm sorter;
-            if ("i".equals(algorithmParam)) {
-                sorter = new InsertionSort();
-            } else {
-                // This path is now unreachable because validation handles it first.
-                throw new InvalidParameterException("Invalid sorting algorithm. Only 'i' for Insertion Sort is supported for this deliverable.");
-            }
-            sorter.sort(troops);
+            // Display initial battlefield
+            System.out.println("\nInitial Position:");
+            System.out.println(battlefield.render(params.getType().equals("n")));
 
-            // Step 6: Reassign positions for a new battlefield after sorting.
-            Battlefield finalBattlefield = new Battlefield(battlefieldSize);
-            finalBattlefield.placeSorted(troops);
+            System.out.println("\nApplying " + sortingStrategy.getName() + "...");
 
-            // Step 7: Print the final sorted positions.
-            System.out.println("Final Position:");
-            finalBattlefield.display();
+            long startTime = System.currentTimeMillis();
+            sortingStrategy.sort(units);
+            long endTime = System.currentTimeMillis();
 
-        } catch (InvalidParameterException e) {
-            // Error handling to match the specific output format of the examples.
-            System.err.println("Algorithm: [Invalid]");
-            System.err.println("Type: [Invalid]");
-            System.err.println("Troops: [Invalid]");
-            System.err.println("Invalid Values");
-        } catch (Exception e) {
-            System.err.println("An unexpected error occurred: " + e.getMessage());
+            // Apply new positions according to orientation
+            battlefield.applyNewPositions(units, params.getOrientation());
+
+            // Display final battlefield
+            System.out.println("\nFinal Position:");
+            System.out.println(battlefield.render(params.getType().equals("n")));
+
+            // Display execution time
+            System.out.println("\nExecution time: " + (endTime - startTime) + "ms");
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
+            System.exit(1);
         }
+    }
+
+    /**
+     * Creates a list of military units based on the given distribution.
+     * @param distribution An array of integers representing the number of units of each type.
+     * @return A list of Character objects.
+     */
+    private static List<Character> createUnits(int[] distribution) {
+        List<Character> units = new ArrayList<>();
+
+        // Create units in order: Commander, Medic, Tank, Sniper, Infantry
+        for (int i = 0; i < distribution[0]; i++) {
+            units.add(new Commander());
+        }
+        for (int i = 0; i < distribution[1]; i++) {
+            units.add(new Medic());
+        }
+        for (int i = 0; i < distribution[2]; i++) {
+            units.add(new Tank());
+        }
+        for (int i = 0; i < distribution[3]; i++) {
+            units.add(new Sniper());
+        }
+        for (int i = 0; i < distribution[4]; i++) {
+            units.add(new Infantry());
+        }
+
+        return units;
+    }
+
+    /**
+     * Calculates the total number of troops from a distribution array.
+     * @param distribution The unit distribution array.
+     * @return The total number of units.
+     */
+    private static int calculateTotalTroops(int[] distribution) {
+        int total = 0;
+        for (int count : distribution) {
+            total += count;
+        }
+        return total;
+    }
+
+    /**
+     * Converts a single-character orientation code to its full name.
+     * @param orientationCode The single-character code ('n', 's', 'e', 'w').
+     * @return The full name of the orientation.
+     */
+    private static String getOrientationName(String orientationCode) {
+        return switch (orientationCode.toLowerCase()) {
+            case "n" -> "North";
+            case "s" -> "South";
+            case "e" -> "East";
+            case "w" -> "West";
+            default -> orientationCode; // Fallback for invalid codes
+        };
     }
 }
