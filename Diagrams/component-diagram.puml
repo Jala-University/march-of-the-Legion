@@ -1,0 +1,109 @@
+@startuml component-diagram
+!theme plain
+skinparam componentFontSize 12
+skinparam packageFontSize 14
+
+title March of the Legion - Component Architecture
+
+package "CLI Layer" {
+    component [Parameters] as CLI
+    note right of CLI
+        • Command-line argument parser
+        • Parameter validation
+        • Configuration management
+    end note
+}
+
+package "Application Layer" {
+    component [Main] as APP
+    note right of APP
+        • Application entry point
+        • Orchestrates execution flow
+        • Unit creation and management
+    end note
+}
+
+package "Model Layer" {
+    package "Core Models" {
+        component [Battlefield] as FIELD
+        component [Character] as CHAR
+        component [Position] as POS
+    }
+
+    package "Unit Types" {
+        component [Commander] as CMD
+        component [Medic] as MED
+        component [Tank] as TANK
+        component [Sniper] as SNIPER
+        component [Infantry] as INF
+    }
+
+    note right of FIELD
+        • 6x6 grid management
+        • Unit placement logic
+        • ASCII rendering
+    end note
+
+    note right of CHAR
+        • Abstract base class
+        • Rank-based hierarchy
+        • Position management
+    end note
+}
+
+package "Algorithm Layer" {
+    component [SortingStrategy] as STRATEGY
+    component [InsertionSort] as INSERTION
+    component [SortingStrategyFactory] as FACTORY
+
+    note right of STRATEGY
+        • Strategy pattern interface
+        • Extensible for new algorithms
+    end note
+
+    note right of INSERTION
+        • O(n²) sorting implementation
+        • Rank-based comparison
+    end note
+}
+
+' Relationships - Dependencies
+APP ..> CLI : uses
+APP ..> FIELD : creates & manages
+APP ..> CHAR : manages
+APP ..> STRATEGY : delegates sorting
+
+CLI ..> APP : provides configuration
+
+FIELD ..> CHAR : contains
+FIELD ..> POS : uses
+
+CHAR <.. CMD : extends
+CHAR <.. MED : extends
+CHAR <.. TANK : extends
+CHAR <.. SNIPER : extends
+CHAR <.. INF : extends
+
+CHAR ..> POS : has
+
+STRATEGY <.. INSERTION : implements
+FACTORY ..> STRATEGY : creates
+FACTORY ..> INSERTION : instantiates
+
+' Interfaces
+interface "Command Line\nInterface" as CLIInterface
+interface "Sorting\nAlgorithms" as SortInterface
+interface "Unit\nManagement" as UnitInterface
+
+CLIInterface -- CLI
+SortInterface -- STRATEGY
+UnitInterface -- CHAR
+
+' External dependencies
+[Java Runtime\nEnvironment] as JRE
+[Maven Build\nSystem] as MAVEN
+
+APP ..> JRE : runs on
+MAVEN ..> APP : builds
+
+@enduml

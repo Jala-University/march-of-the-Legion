@@ -1,0 +1,98 @@
+@startuml deployment-diagram
+!theme plain
+skinparam nodeFontSize 12
+skinparam componentFontSize 10
+
+title March of the Legion - Deployment Architecture
+
+node "Development Environment" as DevEnv {
+
+    node "Build System" as Build {
+        component [Maven 3.8+] as Maven
+        artifact "pom.xml" as POM
+        artifact "Source Code" as SRC
+
+        Maven --> POM : reads configuration
+        Maven --> SRC : compiles
+    }
+
+    node "Java Runtime" as JRE {
+        component [Java 24+ JVM] as JVM
+        artifact "legion-1.0-SNAPSHOT.jar" as JAR
+        component [Main Application] as MainApp
+
+        JVM --> JAR : loads & executes
+        JAR --> MainApp : contains
+    }
+
+    node "File System" as FS {
+        folder "Project Structure" as ProjectFS {
+            artifact "README.md" as README
+            artifact "Diagrams/*.puml" as Diagrams
+            folder "src/main/java" as MainSrc
+            folder "src/test/java" as TestSrc
+            folder "target/" as Target
+        }
+    }
+}
+
+node "User Environment" as UserEnv {
+    actor "Developer/User" as User
+    component [Terminal/CLI] as Terminal
+}
+
+cloud "Version Control" as VCS {
+    component [Git Repository] as Git
+    artifact "Source Code" as GitSrc
+}
+
+' Build process
+Maven --> JAR : generates
+Maven --> Target : outputs to
+
+' User interactions
+User --> Terminal : executes commands
+Terminal --> JVM : java -jar legion.jar
+User --> IDE : development (optional)
+IDE --> Maven : build commands
+
+' Version control
+FS --> Git : commits/pushes
+Git --> FS : clones/pulls
+
+' Execution flow
+Terminal --> MainApp : command line arguments
+MainApp --> Terminal : console output
+
+' Deployment notes
+note right of JAR
+    **Executable JAR contains:**
+    • Main application classes
+    • Unit implementations
+    • Sorting algorithms
+    • CLI parameter handling
+
+    **Execution modes:**
+    • Direct JAR execution
+    • Maven exec plugin
+    • IDE execution
+end note
+
+note left of Maven
+    **Build artifacts:**
+    • Compiled classes (target/classes)
+    • Test classes (target/test-classes)
+    • Packaged JAR (target/*.jar)
+
+    **Dependencies:**
+    • JUnit Jupiter (test scope)
+    • Java 24 runtime
+end note
+
+note bottom of User
+    **Usage examples:**
+    java -jar legion.jar a=i u=2,1,1,1,3 t=c
+    mvn exec:java "-Dexec.args=a=i u=1,1,1,1,1 t=n"
+end note
+
+@enduml

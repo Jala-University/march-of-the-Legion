@@ -1,0 +1,111 @@
+@startuml use-case-diagram
+!theme plain
+left to right direction
+skinparam usecase {
+    BackgroundColor lightblue
+    BorderColor darkblue
+}
+
+title March of the Legion - Use Case Diagram
+
+actor "Developer/Student" as User
+actor "Educator" as Teacher
+
+rectangle "March of the Legion System" {
+
+    package "Core Simulation" {
+        usecase "Execute Battlefield\nSimulation" as UC1
+        usecase "Configure Unit\nDistribution" as UC2
+        usecase "Select Display\nType" as UC3
+        usecase "View Initial\nFormation" as UC4
+        usecase "Apply Sorting\nAlgorithm" as UC5
+        usecase "View Final\nFormation" as UC6
+    }
+
+    package "Algorithm Learning" {
+        usecase "Demonstrate\nInsertion Sort" as UC7
+        usecase "Visualize Sorting\nProcess" as UC8
+        usecase "Compare Before/After\nStates" as UC9
+    }
+
+    package "System Management" {
+        usecase "Validate Input\nParameters" as UC10
+        usecase "Handle Error\nConditions" as UC11
+        usecase "Generate Console\nOutput" as UC12
+    }
+
+    package "Educational Features" {
+        usecase "Learn Algorithm\nComplexity" as UC13
+        usecase "Understand Military\nHierarchy" as UC14
+        usecase "Study Code\nArchitecture" as UC15
+    }
+}
+
+' Primary relationships
+User --> UC1 : initiates
+User --> UC2 : specifies units
+User --> UC3 : chooses display mode
+
+' Core simulation flow
+UC1 ..> UC2 : <<include>>
+UC1 ..> UC3 : <<include>>
+UC1 ..> UC4 : <<include>>
+UC1 ..> UC5 : <<include>>
+UC1 ..> UC6 : <<include>>
+
+' Algorithm demonstration
+UC1 ..> UC7 : <<include>>
+UC7 ..> UC8 : <<include>>
+UC8 ..> UC9 : <<include>>
+
+' System management
+UC1 ..> UC10 : <<include>>
+UC1 ..> UC11 : <<extend>>
+UC1 ..> UC12 : <<include>>
+
+' Educational aspects
+Teacher --> UC13 : teaches with
+Teacher --> UC14 : explains using
+Teacher --> UC15 : demonstrates
+
+UC7 ..> UC13 : supports
+UC4 ..> UC14 : shows
+UC6 ..> UC14 : shows
+UC1 ..> UC15 : exemplifies
+
+' Alternative flows
+UC2 ..> UC11 : <<extend>> : invalid distribution
+UC3 ..> UC11 : <<extend>> : invalid type
+UC10 ..> UC11 : <<extend>> : validation fails
+
+note right of UC1
+    **Main Success Scenario:**
+    1. Parse command line parameters
+    2. Create and place units randomly
+    3. Display initial formation
+    4. Sort units by military rank
+    5. Display final formation
+end note
+
+note left of UC7
+    **Algorithm Details:**
+    • Time Complexity: O(n²)
+    • Space Complexity: O(1)
+    • Stable sorting algorithm
+    • Rank-based comparison
+end note
+
+note bottom of UC2
+    **Parameter Format:**
+    u=commander,medic,tank,sniper,infantry
+    Example: u=2,1,1,1,3
+    Max total: 36 units (6x6 grid)
+end note
+
+note top of UC3
+    **Display Types:**
+    • Character mode (t=c): C, M, T, S, I
+    • Numeric mode (t=n): 1, 2, 3, 4, 5
+end note
+
+@enduml

@@ -1,0 +1,90 @@
+@startuml activity-diagram
+!theme plain
+skinparam activity {
+    BackgroundColor lightblue
+    BorderColor darkblue
+    FontSize 11
+}
+
+title March of the Legion - Main Execution Flow
+
+start
+
+note right
+    **Command Format:**
+    java -jar legion.jar a=i u=2,1,1,1,3 t=c
+
+    **Parameters:**
+    • a = algorithm (i=insertion)
+    • u = unit distribution
+    • t = display type (c/n)
+end note
+
+:User executes application\nwith command line parameters;
+
+:Parse command line arguments\n(a=i u=X,X,X,X,X t=c/n);
+
+if (Parameters valid?) then (yes)
+    :Extract algorithm type (i=Insertion Sort);
+    :Extract unit distribution array;
+    :Extract display type (c=Character, n=Numeric);
+else (no)
+    :Display error message;
+    stop
+endif
+
+:Create SortingStrategy instance\n(InsertionSort);
+
+:Calculate total troop count;
+
+:Display program configuration\n(Algorithm, Type, Troops, Battlefield);
+
+:Create 6x6 Battlefield;
+
+:Generate units based on distribution\n(Commander, Medic, Tank, Sniper, Infantry);
+
+:Place units randomly on battlefield;
+
+:Render and display initial formation\n(ASCII grid with * for empty spaces);
+
+partition "Insertion Sort Algorithm" {
+    :Initialize sorting process;
+
+    repeat
+        :Select next unit to insert;
+        :Find correct position based on rank;
+        :Shift higher-ranked units;
+        :Insert unit in correct position;
+    repeat while (More units to sort?)
+
+    :Units sorted by military rank\n(0=Commander to 4=Infantry);
+}
+
+note left
+    **Military Hierarchy:**
+    Rank 0: Commander (C/1)
+    Rank 1: Medic (M/2)
+    Rank 2: Tank (T/3)
+    Rank 3: Sniper (S/4)
+    Rank 4: Infantry (I/5)
+end note
+
+:Clear battlefield grid;
+
+:Place sorted units in South formation\n(Column-wise from bottom-left);
+
+:Render and display final formation\n(ASCII grid showing sorted arrangement);
+
+:Program execution complete;
+
+note right
+    **Insertion Sort Complexity:**
+    • Time: O(n²) worst/average case
+    • Time: O(n) best case (already sorted)
+    • Space: O(1) in-place sorting
+    • Stable: maintains relative order
+end note
+
+stop
+
+@enduml

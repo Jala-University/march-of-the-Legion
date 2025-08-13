@@ -26,22 +26,22 @@
 ## 📐 System Architecture
 
 ### Class Diagram
-![Class Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/march-of-the-Legion/First-Stage/First-Stage/Diagrams/class-diagram.puml)
+![Class Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/class-diagram.puml)
 
 ### Component Architecture
-![Component Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/component-diagram.puml)
+![Component Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/component-diagram.puml)
 
 ### Execution Flow
-![Sequence Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/sequence-diagram.puml)
+![Sequence Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/sequence-diagram.puml)
 
 ### Main Process Flow
-![Activity Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/activity-diagram.puml)
+![Activity Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/Diagrams/activity-diagram.puml)
 
 ### Use Cases
-![Use Case Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/use-case-diagram.puml)
+![Use Case Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/use-case-diagram.puml)
 
 ### Deployment Architecture
-![Deployment Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/deployment-diagram.puml)
+![Deployment Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/deployment-diagram.puml)
 
 ---
 

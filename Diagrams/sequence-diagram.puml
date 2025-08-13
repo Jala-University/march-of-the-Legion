@@ -1,0 +1,101 @@
+@startuml sequence-diagram
+!theme plain
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam sequenceMessageAlign center
+
+title March of the Legion - Main Execution Flow
+
+actor User
+participant Main
+participant Parameters
+participant Battlefield
+participant "Unit:Character" as Unit
+participant InsertionSort
+participant SortingStrategyFactory
+
+User -> Main : java -jar legion.jar a=i u=2,1,1,1,3 t=c
+activate Main
+
+Main -> Parameters : new Parameters(args)
+activate Parameters
+Parameters -> Parameters : parseArgs(args)
+Parameters -> Parameters : validateParameters()
+Parameters --> Main : Parameters instance
+deactivate Parameters
+
+Main -> SortingStrategyFactory : createStrategy("i")
+activate SortingStrategyFactory
+SortingStrategyFactory -> InsertionSort : new InsertionSort()
+activate InsertionSort
+InsertionSort --> SortingStrategyFactory : InsertionSort instance
+deactivate InsertionSort
+SortingStrategyFactory --> Main : SortingStrategy
+deactivate SortingStrategyFactory
+
+Main -> Parameters : getUnitDistribution()
+activate Parameters
+Parameters --> Main : int[] {2,1,1,1,3}
+deactivate Parameters
+
+Main -> Main : createUnits(distribution)
+activate Main
+loop for each unit type
+    Main -> Unit : new Commander(), new Medic(), etc.
+    activate Unit
+    Unit --> Main : Character instance
+    deactivate Unit
+end
+Main --> Main : List<Character>
+deactivate Main
+
+Main -> Battlefield : new Battlefield(6)
+activate Battlefield
+Battlefield --> Main : Battlefield instance
+
+Main -> Battlefield : placeUnitsRandomly(units)
+Battlefield -> Battlefield : clear grid
+loop for each unit
+    Battlefield -> Battlefield : find random empty position
+    Battlefield -> Unit : setPosition(position)
+    activate Unit
+    Unit --> Battlefield :
+    deactivate Unit
+    Battlefield -> Battlefield : place in grid
+end
+Battlefield --> Main : units placed
+
+Main -> Parameters : getType()
+activate Parameters
+Parameters --> Main : "c"
+deactivate Parameters
+
+Main -> Battlefield : renderInitial(useNumeric=false)
+Battlefield --> Main : initial grid string
+Main -> User : print "Initial Position:\n" + grid
+deactivate Battlefield
+
+Main -> InsertionSort : sort(units)
+activate InsertionSort
+loop i = 1 to units.size()-1
+    InsertionSort -> Unit : getRank()
+    activate Unit
+    Unit --> InsertionSort : rank
+    deactivate Unit
+    InsertionSort -> InsertionSort : insertion sort logic
+end
+InsertionSort --> Main : units sorted by rank
+deactivate InsertionSort
+
+Main -> Battlefield : renderFinal(useNumeric=false)
+activate Battlefield
+Battlefield -> Battlefield : clear grid
+Battlefield -> Battlefield : place sorted units in South formation
+Battlefield --> Main : final grid string
+deactivate Battlefield
+
+Main -> User : print "Final Position:\n" + grid
+
+deactivate Main
+
+@enduml
