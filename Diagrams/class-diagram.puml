@@ -1,0 +1,151 @@
+@startuml class-diagram
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam packageFontSize 14
+
+package "university.jala.legion" {
+    class Main {
+        +main(String[] args)
+        -createUnits(int[] distribution) : List<Character>
+        -calculateTotalTroops(int[] distribution) : int
+    }
+}
+
+package "university.jala.legion.cli" {
+    class Parameters {
+        -parameters : Map<String, String>
+        +Parameters(String[] args)
+        -parseArgs(String[] args)
+        -validateParameters()
+        -validateType()
+        -validateUnitDistribution()
+        +getType() : String
+        +getUnitDistribution() : int[]
+    }
+}
+
+package "university.jala.legion.model" {
+    abstract class Character {
+        -rank : int
+        -position : Position
+        -symbol : char
+        -numericRange : int
+        #Character(int rank, char symbol, int numericRange)
+        +getRank() : int
+        +getPosition() : Position
+        +setPosition(Position position)
+        +getSymbol() : char
+        +getNumericRange() : int
+        +{abstract}getType() : String
+        +toString() : String
+    }
+
+    class Position {
+        -row : int
+        -column : int
+        +Position(int row, int column)
+        +getRow() : int
+        +getColumn() : int
+        +equals(Object obj) : boolean
+        +hashCode() : int
+        +toString() : String
+    }
+
+    class Battlefield {
+        -size : int
+        -grid : Character[][]
+        -units : List<Character>
+        -random : Random
+        +Battlefield(int size)
+        +placeUnitsRandomly(List<Character> units)
+        -isPositionEmpty(Position position) : boolean
+        -placeUnit(Character unit, Position position)
+        +renderInitial(boolean useNumeric) : String
+        +renderFinal(boolean useNumeric) : String
+        +getUnits() : List<Character>
+    }
+}
+
+package "university.jala.legion.model.units" {
+    class Commander {
+        -{static}RANK : int = 0
+        -{static}SYMBOL : char = 'C'
+        -{static}NUMERIC_RANGE : int = 1
+        +Commander()
+        +getType() : String
+    }
+
+    class Medic {
+        -{static}RANK : int = 1
+        -{static}SYMBOL : char = 'M'
+        -{static}NUMERIC_RANGE : int = 2
+        +Medic()
+        +getType() : String
+    }
+
+    class Tank {
+        -{static}RANK : int = 2
+        -{static}SYMBOL : char = 'T'
+        -{static}NUMERIC_RANGE : int = 3
+        +Tank()
+        +getType() : String
+    }
+
+    class Sniper {
+        -{static}RANK : int = 3
+        -{static}SYMBOL : char = 'S'
+        -{static}NUMERIC_RANGE : int = 4
+        +Sniper()
+        +getType() : String
+    }
+
+    class Infantry {
+        -{static}RANK : int = 4
+        -{static}SYMBOL : char = 'I'
+        -{static}NUMERIC_RANGE : int = 5
+        +Infantry()
+        +getType() : String
+    }
+}
+
+package "university.jala.legion.sorting" {
+    interface SortingStrategy {
+        +sort(List<Character> units)
+        +getName() : String
+    }
+
+    class InsertionSort {
+        +sort(List<Character> units)
+        +getName() : String
+    }
+
+    class SortingStrategyFactory {
+        +{static}createStrategy(String algorithmCode) : SortingStrategy
+    }
+}
+
+' Relationships
+Main --> Parameters : uses
+Main --> Battlefield : creates
+Main --> Character : manages
+Main --> SortingStrategy : uses
+
+Parameters --> Main : provides configuration
+
+Character <|-- Commander
+Character <|-- Medic
+Character <|-- Tank
+Character <|-- Sniper
+Character <|-- Infantry
+
+Character --> Position : has
+
+Battlefield --> Character : contains
+Battlefield --> Position : uses
+
+SortingStrategy <|.. InsertionSort
+SortingStrategyFactory --> SortingStrategy : creates
+SortingStrategyFactory --> InsertionSort : instantiates
+
+@enduml
