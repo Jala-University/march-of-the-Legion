@@ -432,8 +432,8 @@ This project serves as an excellent educational resource for:
 
 Made with ❤️ for algorithmic learning
 
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/march-of-the-legion)](https://github.com/yourusername/march-of-the-legion/issues)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/march-of-the-legion)](https://github.com/yourusername/march-of-the-legion/network)
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/march-of-the-legion)](https://github.com/yourusername/march-of-the-legion/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/Jala-University/march-of-the-Legion)](https://github.com/yourusername/march-of-the-legion/issues)
+[![GitHub forks](https://img.shields.io/github/forks/Jala-University/march-of-the-Legion)](https://github.com/yourusername/march-of-the-legion/network)
+[![GitHub stars](https://img.shields.io/github/stars/Jala-University/march-of-the-Legion)](https://github.com/yourusername/march-of-the-legion/stargazers)
 
 </div>
