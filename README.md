@@ -23,7 +23,29 @@
 
 ---
 
-## 🏗️ Architecture
+## 📐 System Architecture
+
+### Class Diagram
+![Class Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/march-of-the-Legion/First-Stage/First-Stage/Diagrams/class-diagram.puml)
+
+### Component Architecture
+![Component Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/component-diagram.puml)
+
+### Execution Flow
+![Sequence Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/sequence-diagram.puml)
+
+### Main Process Flow
+![Activity Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/activity-diagram.puml)
+
+### Use Cases
+![Use Case Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/use-case-diagram.puml)
+
+### Deployment Architecture
+![Deployment Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/yourusername/march-of-the-legion/main/Diagrams/deployment-diagram.puml)
+
+---
+
+## 🗃️ Architecture
 
 ```
 src/main/java/university/jala/legion/
@@ -61,6 +83,9 @@ src/main/java/university/jala/legion/
 # Clone the repository
 git clone https://github.com/yourusername/march-of-the-legion.git
 cd march-of-the-legion
+
+# Create Diagrams folder and add PlantUML files
+mkdir Diagrams
 
 # Compile the project
 mvn compile
@@ -191,6 +216,24 @@ mvn package
 java -jar target/legion-1.0-SNAPSHOT.jar a=i u=1,1,1,1,1 t=c
 ```
 
+### Creating Diagrams
+
+This project includes PlantUML diagrams in the `Diagrams/` folder:
+
+- `class-diagram.puml` - Complete class structure and relationships
+- `component-diagram.puml` - High-level component architecture
+- `sequence-diagram.puml` - Main execution flow sequence
+- `activity-diagram.puml` - Process flow and decision points
+- `use-case-diagram.puml` - User interactions and system features
+- `deployment-diagram.puml` - Deployment and runtime architecture
+
+To create the `Diagrams` folder and add the PlantUML files:
+
+```bash
+mkdir Diagrams
+# Copy the .puml files to the Diagrams folder
+```
+
 ### Running Tests
 
 The project includes custom test classes that output results to the console:
@@ -262,6 +305,70 @@ The sorting is based on military hierarchy where lower rank numbers indicate hig
 
 ---
 
+## 📋 Design Patterns Used
+
+### Strategy Pattern
+The `SortingStrategy` interface allows for different sorting algorithms to be implemented and swapped easily:
+
+```java
+public interface SortingStrategy {
+    void sort(List<Character> units);
+    String getName();
+}
+```
+
+### Factory Pattern
+The `SortingStrategyFactory` creates appropriate sorting strategy instances:
+
+```java
+public static SortingStrategy createStrategy(String algorithmCode) {
+    return switch (algorithmCode) {
+        case "i" -> new InsertionSort();
+        default -> throw new IllegalArgumentException("Invalid algorithm code");
+    };
+}
+```
+
+### Template Method Pattern
+The abstract `Character` class provides a template for all military units:
+
+```java
+public abstract class Character {
+    // Common properties and methods
+    public abstract String getType();
+}
+```
+
+---
+
+## 🏗️ Architecture Highlights
+
+### Layered Architecture
+- **CLI Layer**: Command-line parameter handling and validation
+- **Application Layer**: Main execution flow and orchestration
+- **Model Layer**: Core domain objects and battlefield representation
+- **Algorithm Layer**: Sorting strategy implementations
+
+### Key Components
+
+#### Battlefield Management
+- **Grid System**: 6x6 matrix for unit placement
+- **Random Placement**: Initial random distribution of units
+- **Formation Rendering**: ASCII visualization in both character and numeric modes
+- **South Orientation**: Final sorted placement follows military formation patterns
+
+#### Unit Hierarchy
+- **Rank-Based System**: Military hierarchy from Commander (0) to Infantry (4)
+- **Polymorphic Design**: All units extend the base `Character` class
+- **Position Management**: Each unit maintains its battlefield coordinates
+
+#### Algorithm Implementation
+- **Insertion Sort**: O(n²) time complexity, O(1) space complexity
+- **Stable Sorting**: Maintains relative order of equal-ranked units
+- **In-Place Sorting**: Sorts the unit list without additional memory overhead
+
+---
+
 ## 🤝 Contributing
 
 We welcome contributions! Please feel free to:
@@ -271,6 +378,13 @@ We welcome contributions! Please feel free to:
 3. 💾 Commit your changes (`git commit -m 'Add amazing feature'`)
 4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
 5. 📄 Open a Pull Request
+
+### Contribution Guidelines
+
+- Follow existing code style and conventions
+- Add appropriate unit tests for new functionality
+- Update documentation and diagrams as needed
+- Ensure all tests pass before submitting PR
 
 ---
 
@@ -285,6 +399,30 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Educational tool for understanding sorting algorithm behavior
 - Demonstrates military tactical formations through algorithmic visualization
 - Built using modern Java features and object-oriented design principles
+- Architecture designed for extensibility and maintainability
+
+---
+
+## 📚 Educational Value
+
+This project serves as an excellent educational resource for:
+
+### Computer Science Concepts
+- **Algorithm Analysis**: Understanding time and space complexity
+- **Sorting Algorithms**: Practical implementation of Insertion Sort
+- **Design Patterns**: Strategy, Factory, and Template Method patterns
+- **Object-Oriented Programming**: Inheritance, polymorphism, and encapsulation
+
+### Software Engineering Practices
+- **Clean Architecture**: Separation of concerns and layered design
+- **Unit Testing**: Custom test implementations and validation
+- **Build Management**: Maven configuration and dependency management
+- **Documentation**: Comprehensive README and code documentation
+
+### Military/Strategic Thinking
+- **Hierarchy Systems**: Understanding organizational structures
+- **Formation Tactics**: Military unit arrangement and positioning
+- **Command Structure**: Chain of command and priority systems
 
 ---
 
@@ -293,5 +431,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **⭐ Star this repo if you found it interesting! ⭐**
 
 Made with ❤️ for algorithmic learning
+
+[![GitHub issues](https://img.shields.io/github/issues/yourusername/march-of-the-legion)](https://github.com/yourusername/march-of-the-legion/issues)
+[![GitHub forks](https://img.shields.io/github/forks/yourusername/march-of-the-legion)](https://github.com/yourusername/march-of-the-legion/network)
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/march-of-the-legion)](https://github.com/yourusername/march-of-the-legion/stargazers)
 
 </div>
