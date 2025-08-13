@@ -196,10 +196,22 @@ java -jar target/legion-1.0-SNAPSHOT.jar a=i u=1,1,1,1,1 t=c
 The project includes custom test classes that output results to the console:
 
 ```bash
-# Run all tests
+# Run all tests (recommended)
 mvn test
 
-# Run specific test classes
+# Compile test classes first
+mvn test-compile
+
+# Run specific test classes (Windows)
+java -cp "target/test-classes;target/classes" university.jala.legion.cli.ParametersTest
+java -cp "target/test-classes;target/classes" university.jala.legion.model.BattlefieldTest
+java -cp "target/test-classes;target/classes" university.jala.legion.model.CharacterTest
+java -cp "target/test-classes;target/classes" university.jala.legion.model.PositionTest
+java -cp "target/test-classes;target/classes" university.jala.legion.sorting.InsertionSortTest
+
+# Run specific test classes (Linux/Mac)
+java -cp target/test-classes:target/classes university.jala.legion.cli.ParametersTest
+java -cp target/test-classes:target/classes university.jala.legion.model.BattlefieldTest
 java -cp target/test-classes:target/classes university.jala.legion.model.CharacterTest
 java -cp target/test-classes:target/classes university.jala.legion.model.PositionTest
 java -cp target/test-classes:target/classes university.jala.legion.sorting.InsertionSortTest
