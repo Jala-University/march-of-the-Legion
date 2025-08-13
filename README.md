@@ -35,7 +35,7 @@
 ![Sequence Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/sequence-diagram.puml)
 
 ### Main Process Flow
-![Activity Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/Diagrams/activity-diagram.puml)
+![Activity Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/activity-diagram.puml)
 
 ### Use Cases
 ![Use Case Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/use-case-diagram.puml)
