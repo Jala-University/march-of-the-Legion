@@ -81,11 +81,11 @@ src/main/java/university/jala/legion/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/march-of-the-legion.git
-cd march-of-the-legion
+git clone https://github.com/Jala-University/march-of-the-Legion.git
+cd march-of-the-Legion
 
-# Create Diagrams folder and add PlantUML files
-mkdir Diagrams
+# Switch to the "First-Stage" branch
+git checkout First-Stage
 
 # Compile the project
 mvn compile
