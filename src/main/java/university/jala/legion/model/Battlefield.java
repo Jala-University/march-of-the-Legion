@@ -27,7 +27,7 @@ public class Battlefield {
     public void placeUnitsRandomly(List<Character> units) {
         this.units.clear();
         this.units.addAll(units);
-
+        
         // Clear the grid
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -62,7 +62,7 @@ public class Battlefield {
      */
     public String render(boolean useNumeric) {
         StringBuilder sb = new StringBuilder();
-
+        
         // Add top border
         sb.append("+");
         for (int i = 0; i < size; i++) sb.append("--");
