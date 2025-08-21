@@ -1,18 +1,30 @@
+// Represents a single unit of Commander.
 package university.jala.legion.model.units;
 
 import university.jala.legion.model.Character;
 
+/**
+ * Commander class, represents the highest priority military unit.
+ * Rank 0 (Highest priority)
+ */
 public class Commander extends Character {
-    private static final int RANK = 0;
-    private static final char SYMBOL = 'C';
-    private static final int NUMERIC_RANGE = 1;
-
-    public Commander() {
-        super(RANK, SYMBOL, NUMERIC_RANGE);
+    public Commander(String type) {
+        super(type);
+        this.rank = 0;
+        if ("n".equals(type)) {
+            this.numericValue = getRandomNumericValue(1, 11);
+        } else {
+            this.characterValue = getRandomCharacterValue('a', 'j');
+        }
     }
 
-    @Override
-    public String getType() {
-        return "Commander";
+    // Helper method to get a random numeric value for Commander
+    private String getRandomNumericValue(int min, int max) {
+        return String.valueOf(new java.util.Random().nextInt(max - min) + min);
+    }
+
+    // Helper method to get a random character value for Commander
+    private String getRandomCharacterValue(char min, char max) {
+        return String.valueOf((char) (new java.util.Random().nextInt(max - min + 1) + min));
     }
 }

@@ -4,7 +4,7 @@ skinparam sequenceArrowThickness 2
 skinparam roundcorner 20
 skinparam sequenceMessageAlign center
 
-title March of the Legion - Main Execution Flow
+title March of the Legion - Enhanced Execution Flow
 
 actor User
 participant Main
@@ -14,13 +14,21 @@ participant "Unit:Character" as Unit
 participant InsertionSort
 participant SortingStrategyFactory
 
-User -> Main : java -jar legion.jar a=i u=2,1,1,1,3 t=c
+User -> Main : java -jar legion.jar a=i u=2,1,1,1,3 t=c o=s f=8
 activate Main
 
 Main -> Parameters : new Parameters(args)
 activate Parameters
 Parameters -> Parameters : parseArgs(args)
 Parameters -> Parameters : validateParameters()
+note right of Parameters
+    **Enhanced validation:**
+    • Algorithm (a=i,q,c,r)
+    • Unit distribution (5 values)
+    • Display type (t=c,n)
+    • Orientation (o=n,s,e,w)
+    • Battlefield size (f=5-1000)
+end note
 Parameters --> Main : Parameters instance
 deactivate Parameters
 
@@ -38,37 +46,55 @@ activate Parameters
 Parameters --> Main : int[] {2,1,1,1,3}
 deactivate Parameters
 
-Main -> Main : createUnits(distribution)
+Main -> Parameters : getType()
+activate Parameters
+Parameters --> Main : "c"
+deactivate Parameters
+
+Main -> Parameters : getOrientation()
+activate Parameters
+Parameters --> Main : "s"
+deactivate Parameters
+
+Main -> Parameters : getBattlefieldSize()
+activate Parameters
+Parameters --> Main : 8
+deactivate Parameters
+
+Main -> Main : createUnits(distribution, "c")
 activate Main
 loop for each unit type
-    Main -> Unit : new Commander(), new Medic(), etc.
+    Main -> Unit : new Commander("c"), new Medic("c"), etc.
     activate Unit
+    note right of Unit
+        **Random display values:**
+        • Character mode: random letters
+        • Numeric mode: random numbers
+        • Type-specific ranges
+    end note
     Unit --> Main : Character instance
     deactivate Unit
 end
 Main --> Main : List<Character>
 deactivate Main
 
-Main -> Battlefield : new Battlefield(6)
+Main -> Battlefield : new Battlefield(8)
 activate Battlefield
 Battlefield --> Main : Battlefield instance
 
 Main -> Battlefield : placeUnitsRandomly(units)
-Battlefield -> Battlefield : clear grid
+Battlefield -> Battlefield : initializeGrid()
+Battlefield -> Battlefield : shuffle available positions
 loop for each unit
-    Battlefield -> Battlefield : find random empty position
-    Battlefield -> Unit : setPosition(position)
+    Battlefield -> Unit : setPosition(random position)
     activate Unit
     Unit --> Battlefield :
     deactivate Unit
-    Battlefield -> Battlefield : place in grid
+    Battlefield -> Battlefield : update grid
 end
 Battlefield --> Main : units placed
 
-Main -> Parameters : getType()
-activate Parameters
-Parameters --> Main : "c"
-deactivate Parameters
+Main -> User : print configuration\n(Algorithm, Type, Orientation, Troops, Battlefield)
 
 Main -> Battlefield : renderInitial(useNumeric=false)
 Battlefield --> Main : initial grid string
@@ -78,19 +104,33 @@ deactivate Battlefield
 Main -> InsertionSort : sort(units)
 activate InsertionSort
 loop i = 1 to units.size()-1
-    InsertionSort -> Unit : getRank()
+    InsertionSort -> Unit : compareTo(other)
     activate Unit
-    Unit --> InsertionSort : rank
+    Unit --> InsertionSort : comparison result
     deactivate Unit
     InsertionSort -> InsertionSort : insertion sort logic
 end
-InsertionSort --> Main : units sorted by rank
+InsertionSort --> Main : units sorted by military rank
 deactivate InsertionSort
 
-Main -> Battlefield : renderFinal(useNumeric=false)
+Main -> Battlefield : placeUnitsInFormation(units, "s")
 activate Battlefield
 Battlefield -> Battlefield : clear grid
-Battlefield -> Battlefield : place sorted units in South formation
+note right of Battlefield
+    **South formation:**
+    Fill from bottom-left,
+    column by column
+end note
+loop for each unit in sorted order
+    Battlefield -> Battlefield : place in formation pattern
+    Battlefield -> Unit : update position
+    activate Unit
+    Unit --> Battlefield :
+    deactivate Unit
+end
+Battlefield --> Main : formation placed
+
+Main -> Battlefield : renderFinal(useNumeric=false)
 Battlefield --> Main : final grid string
 deactivate Battlefield
 

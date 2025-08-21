@@ -1,6 +1,6 @@
 # 🎖️ March of the Legion
 
-> **A tactical battlefield simulation showcasing Insertion Sort through military unit formations**
+> **A tactical battlefield simulation showcasing sorting algorithms through military unit formations**
 
 [![Java](https://img.shields.io/badge/Java-24-orange.svg)](https://openjdk.java.net/)
 [![Maven](https://img.shields.io/badge/Maven-3.11.0-blue.svg)](https://maven.apache.org/)
@@ -10,38 +10,38 @@
 
 ## 🚀 Overview
 
-**March of the Legion** is a Java application that demonstrates the Insertion Sort algorithm through a visual military battlefield simulation. Watch as different military unit types reorganize themselves on a 6x6 battlefield grid, creating an engaging way to understand sorting algorithm behavior.
+**March of the Legion** is a Java application that demonstrates sorting algorithms through a visual military battlefield simulation. Watch as different military unit types reorganize themselves on a customizable battlefield grid, creating an engaging way to understand sorting algorithm behavior.
 
 ### ✨ Key Features
 
-- 🎯 **Insertion Sort Algorithm**: Demonstrates O(n²) sorting complexity
+- 🎯 **Multiple Sorting Algorithms**: Insertion Sort (implemented) with placeholders for future algorithms
 - ⚔️ **5 Military Unit Types**: Commander, Medic, Tank, Sniper, and Infantry
-- 🗺️ **Fixed 6x6 Battlefield**: Compact grid for clear visualization
-- 🧭 **South Formation**: Units arrange in column-based formation after sorting
+- 🗺️ **Customizable Battlefield**: Grid size from 5x5 to 1000x1000
+- 🧭 **Multiple Formations**: North, South, East, West orientation support
 - 📊 **Dual Display Modes**: Character symbols or numeric representation
-- 🎮 **Simple Command Interface**: Easy-to-use parameter system
+- 🎮 **Flexible Command Interface**: Comprehensive parameter system with validation
 
 ---
 
 ## 📐 System Architecture
 
 ### Class Diagram
-![Class Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/class-diagram.puml)
+![Class Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/implementation-parameters/Diagrams/class-diagram.puml)
 
 ### Component Architecture
-![Component Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/component-diagram.puml)
+![Component Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/implementation-parameters/Diagrams/component-diagram.puml)
 
 ### Execution Flow
-![Sequence Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/sequence-diagram.puml)
+![Sequence Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/implementation-parameters/Diagrams/sequence-diagram.puml)
 
 ### Main Process Flow
-![Activity Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/activity-diagram.puml)
+![Activity Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/implementation-parameters/Diagrams/activity-diagram.puml)
 
 ### Use Cases
-![Use Case Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/use-case-diagram.puml)
+![Use Case Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/implementation-parameters/Diagrams/use-case-diagram.puml)
 
 ### Deployment Architecture
-![Deployment Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/First-Stage/Diagrams/deployment-diagram.puml)
+![Deployment Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Jala-University/march-of-the-Legion/implementation-parameters/Diagrams/deployment-diagram.puml)
 
 ---
 
@@ -51,10 +51,10 @@
 src/main/java/university/jala/legion/
 ├── Main.java                    # Application entry point
 ├── cli/
-│   └── Parameters.java          # Command-line argument parser
+│   └── Parameters.java          # Command-line argument parser with validation
 ├── model/
-│   ├── Battlefield.java         # 6x6 grid management and rendering
-│   ├── Character.java           # Base unit class
+│   ├── Battlefield.java         # Dynamic grid management and rendering
+│   ├── Character.java           # Base unit class with Comparable
 │   ├── Position.java            # Coordinate system
 │   └── units/                   # Military unit implementations
 │       ├── Commander.java       # Rank 0 - Highest priority
@@ -64,8 +64,11 @@ src/main/java/university/jala/legion/
 │       └── Infantry.java       # Rank 4 - Ground troops
 └── sorting/
     ├── SortingStrategy.java     # Strategy pattern interface
-    ├── SortingStrategyFactory.java # Factory (prepared for future algorithms)
-    └── InsertionSort.java      # O(n²) sorting implementation
+    ├── SortingStrategyFactory.java # Factory for algorithm selection
+    ├── InsertionSort.java      # O(n²) sorting implementation
+    ├── QuickSort.java          # Placeholder for future implementation
+    ├── CountingSort.java       # Placeholder for future implementation
+    └── RadixSort.java          # Placeholder for future implementation
 ```
 
 ---
@@ -84,14 +87,11 @@ src/main/java/university/jala/legion/
 git clone https://github.com/Jala-University/march-of-the-Legion.git
 cd march-of-the-Legion
 
-# Switch to the "First-Stage" branch
-git checkout First-Stage
-
 # Compile the project
 mvn compile
 
 # Run with sample parameters
-mvn exec:java "-Dexec.args=a=i u=2,1,1,1,3 t=c"
+mvn exec:java "-Dexec.args=a=i u=2,1,1,1,3 t=c o=s f=6"
 ```
 
 ---
@@ -100,29 +100,32 @@ mvn exec:java "-Dexec.args=a=i u=2,1,1,1,3 t=c"
 
 ### Command Line Parameters
 
-| Parameter | Description | Values | Required | Notes |
-|-----------|-------------|--------|----------|-------|
-| `a` | Sorting Algorithm | `i` (Insertion Sort only) | ✅ | Only Insertion Sort supported |
-| `u` | Unit Distribution | `commander,medic,tank,sniper,infantry` | ✅ | Comma-separated, max 36 total |
-| `t` | Display Type | `c` (Character), `n` (Numeric) | ✅ | Character or numeric display |
-
-**Note**: The battlefield size is fixed at 6x6, and formation orientation is fixed to South.
+| Parameter | Description | Values | Required | Default | Notes |
+|-----------|-------------|--------|----------|---------|-------|
+| `a` | Sorting Algorithm | `i` (Insertion Sort) | ✅ | - | Only Insertion Sort currently implemented |
+| `u` | Unit Distribution | `commander,medic,tank,sniper,infantry` | ✅ | - | Comma-separated, max f*f total |
+| `t` | Display Type | `c` (Character), `n` (Numeric) | ✅ | - | Character symbols or numeric values |
+| `o` | Formation Orientation | `n` (North), `s` (South), `e` (East), `w` (West) | ✅ | - | Final formation direction |
+| `f` | Battlefield Size | `5` to `1000` | ❌ | `6` | Grid size (f x f) |
 
 ### Example Commands
 
 ```bash
-# Basic example with character display
-mvn exec:java "-Dexec.args=a=i u=2,1,1,1,3 t=c"
+# Basic example with all parameters
+mvn exec:java "-Dexec.args=a=i u=2,1,1,1,3 t=c o=s f=8"
 
-# Numeric display example
-mvn exec:java "-Dexec.args=a=i u=1,1,2,2,2 t=n"
+# Numeric display with North orientation
+mvn exec:java "-Dexec.args=a=i u=1,2,3,2,1 t=n o=n f=10"
 
-# Maximum units example
-mvn exec:java "-Dexec.args=a=i u=5,5,5,5,5 t=c"
+# Large battlefield example
+mvn exec:java "-Dexec.args=a=i u=5,5,5,5,5 t=c o=e f=12"
 
-# Alternative: Build JAR first, then run
+# Minimal parameters (uses defaults for o and f)
+mvn exec:java "-Dexec.args=a=i u=1,1,1,1,1 t=c"
+
+# Build JAR and run directly
 mvn clean package
-java -jar target/legion-1.0-SNAPSHOT.jar a=i u=2,1,1,1,3 t=c
+java -jar target/legion-1.0-SNAPSHOT.jar a=i u=2,1,1,1,3 t=c o=w f=8
 ```
 
 ### Alternative Running Methods
@@ -130,18 +133,18 @@ java -jar target/legion-1.0-SNAPSHOT.jar a=i u=2,1,1,1,3 t=c
 **Option 1: Build and run JAR directly**
 ```bash
 mvn clean compile package
-java -jar target/legion-1.0-SNAPSHOT.jar a=i u=2,1,1,1,3 t=c
+java -jar target/legion-1.0-SNAPSHOT.jar a=i u=2,1,1,1,3 t=c o=s f=8
 ```
 
 **Option 2: Run with compiled classes**
 ```bash
 mvn compile
-java -cp target/classes university.jala.legion.Main a=i u=2,1,1,1,3 t=c
+java -cp target/classes university.jala.legion.Main a=i u=2,1,1,1,3 t=c o=s f=8
 ```
 
 **Option 3: Using PowerShell (Windows)**
 ```powershell
-mvn exec:java '-Dexec.args=a=i u=2,1,1,1,3 t=c'
+mvn exec:java '-Dexec.args=a=i u=2,1,1,1,3 t=c o=s f=8'
 ```
 
 ---
@@ -151,37 +154,53 @@ mvn exec:java '-Dexec.args=a=i u=2,1,1,1,3 t=c'
 ```
 Algorithm: [Insertion sort]
 Type: [Character]
+Orientation: [South]
 Troops: [8]
-Battlefield: [6 x 6]
+Battlefield: [8 x 8]
 
 Initial Position:
-* * * * * T 
-* C I * * * 
-* * * * * * 
-* * * * * S 
-* * * * I * 
-* I * * C M 
+*   R   *   *   *   *   *   *
+*   *   *   *   *   *   *   *
+*   *   V   *   *   *   *   *
+j   *   *   *   *   *   *   *   
+*   *   *   *   *   *   *   *
+*   w   *   *   y   *   *   *
+*   *   *   *   *   *   *   T
+*   *   *   t   *   j   *   *
 
 Final Position:
-C * * * * * 
-C * * * * * 
-M * * * * * 
-T * * * * * 
-S * * * * * 
-I * * * * * 
+V   *   *   *   *   *   *   *
+T   *   *   *   *   *   *   *
+R   *   *   *   *   *   *   *   
+y   *   *   *   *   *   *   *
+w   *   *   *   *   *   *   *
+t   *   *   *   *   *   *   *
+j   *   *   *   *   *   *   *
+j   *   *   *   *   *   *   *
 ```
 
 ---
 
 ## 🎖️ Military Unit Hierarchy
 
-| Unit | Symbol | Rank | Numeric | Description |
-|------|--------|------|---------|-------------|
-| **Commander** | `C` | 0 | 1 | Strategic leadership - highest priority |
-| **Medic** | `M` | 1 | 2 | Medical support and field treatment |
-| **Tank** | `T` | 2 | 3 | Heavy armored assault units |
-| **Sniper** | `S` | 3 | 4 | Precision long-range specialists |
-| **Infantry** | `I` | 4 | 5 | Standard ground combat forces |
+| Unit | Rank | Character Range | Numeric Range | Description |
+|------|------|-----------------|---------------|-------------|
+| **Commander** | 0 | a-j | 1-10 | Strategic leadership - highest priority |
+| **Medic** | 1 | k-t | 11-20 | Medical support and field treatment |
+| **Tank** | 2 | u-z, A-J | 21-30 | Heavy armored assault units |
+| **Sniper** | 3 | u-z, A-J | 31-40 | Precision long-range specialists |
+| **Infantry** | 4 | O-X | 41-50 | Standard ground combat forces |
+
+**Note**: Each unit displays random values within their designated ranges for variety.
+
+---
+
+## 🧭 Formation Orientations
+
+- **North (n)**: Fill from top-left, column by column
+- **South (s)**: Fill from bottom-left, column by column
+- **East (e)**: Fill from top-right, row by row
+- **West (w)**: Fill from top-left, row by row
 
 ---
 
@@ -195,6 +214,13 @@ I * * * * *
 - **Method**: Builds sorted array one element at a time by inserting each element into its correct position
 
 The algorithm sorts units by their military rank, with Commanders (rank 0) having the highest priority and Infantry (rank 4) having the lowest priority.
+
+### Prepared for Future Algorithms
+
+The architecture supports easy addition of:
+- **Quick Sort** (`a=q`) - Prepared placeholder
+- **Counting Sort** (`a=c`) - Prepared placeholder
+- **Radix Sort** (`a=r`) - Prepared placeholder
 
 ---
 
@@ -212,73 +238,45 @@ mvn test
 # Create executable JAR
 mvn package
 
-# Run the JAR directly
-java -jar target/legion-1.0-SNAPSHOT.jar a=i u=1,1,1,1,1 t=c
-```
-
-### Creating Diagrams
-
-This project includes PlantUML diagrams in the `Diagrams/` folder:
-
-- `class-diagram.puml` - Complete class structure and relationships
-- `component-diagram.puml` - High-level component architecture
-- `sequence-diagram.puml` - Main execution flow sequence
-- `activity-diagram.puml` - Process flow and decision points
-- `use-case-diagram.puml` - User interactions and system features
-- `deployment-diagram.puml` - Deployment and runtime architecture
-
-To create the `Diagrams` folder and add the PlantUML files:
-
-```bash
-mkdir Diagrams
-# Copy the .puml files to the Diagrams folder
+# Run the JAR with custom parameters
+java -jar target/legion-1.0-SNAPSHOT.jar a=i u=1,1,1,1,1 t=c o=s f=8
 ```
 
 ### Running Tests
 
-The project includes custom test classes that output results to the console:
+The project includes comprehensive test coverage:
 
 ```bash
-# Run all tests (recommended)
+# Run all tests
 mvn test
 
-# Compile test classes first
-mvn test-compile
-
-# Run specific test classes (Windows)
+# Run specific test classes
 java -cp "target/test-classes;target/classes" university.jala.legion.cli.ParametersTest
 java -cp "target/test-classes;target/classes" university.jala.legion.model.BattlefieldTest
 java -cp "target/test-classes;target/classes" university.jala.legion.model.CharacterTest
 java -cp "target/test-classes;target/classes" university.jala.legion.model.PositionTest
 java -cp "target/test-classes;target/classes" university.jala.legion.sorting.InsertionSortTest
-
-# Run specific test classes (Linux/Mac)
-java -cp target/test-classes:target/classes university.jala.legion.cli.ParametersTest
-java -cp target/test-classes:target/classes university.jala.legion.model.BattlefieldTest
-java -cp target/test-classes:target/classes university.jala.legion.model.CharacterTest
-java -cp target/test-classes:target/classes university.jala.legion.model.PositionTest
-java -cp target/test-classes:target/classes university.jala.legion.sorting.InsertionSortTest
 ```
 
 ### Project Structure
 
 The project follows Maven standard directory layout and implements design patterns:
 
-- **Strategy Pattern**: Interface for sorting algorithms (prepared for future expansion)
+- **Strategy Pattern**: Interface for sorting algorithms
 - **Factory Pattern**: For creating sorting strategy instances
 - **Template Method**: Base Character class with concrete unit implementations
+- **Command Pattern**: CLI parameter parsing and validation
 
 ---
 
-## 🎯 Current Limitations
+## 🎯 Current Features
 
-This version is a simplified implementation with the following constraints:
-
-- **Single Algorithm**: Only Insertion Sort is implemented
-- **Fixed Battlefield**: 6x6 grid size only
-- **Fixed Orientation**: South formation pattern only
-- **No Performance Metrics**: Execution time not displayed
-- **Limited Validation**: Basic parameter validation only
+- ✅ **Multiple Sorting Algorithms**: Framework ready for expansion
+- ✅ **Dynamic Battlefield**: Configurable grid size (5-1000)
+- ✅ **Flexible Formations**: Four orientation options
+- ✅ **Robust Validation**: Comprehensive parameter checking
+- ✅ **Randomized Display**: Varied character and numeric representations
+- ✅ **Extensible Architecture**: Prepared for future enhancements
 
 ---
 
@@ -286,30 +284,28 @@ This version is a simplified implementation with the following constraints:
 
 The architecture is designed to support future expansions:
 
-- Additional sorting algorithms (Quick Sort, Merge Sort, Radix Sort, Counting Sort)
-- Variable battlefield sizes
-- Multiple formation orientations (North, East, West)
-- Performance timing and comparison features
-- Advanced visualization options
+- **Additional Algorithms**: Implement Quick Sort, Counting Sort, Radix Sort
+- **Performance Metrics**: Execution timing and comparison features
+- **Advanced Visualization**: Graphical interface options
+- **Unit Animations**: Visual sorting process demonstration
+- **Battle Scenarios**: Thematic military engagement simulations
 
 ---
 
 ## 🤔 How It Works
 
-1. **Initialization**: Units are randomly placed on the 6x6 battlefield
-2. **Display**: Initial random formation is shown
-3. **Sorting**: Insertion Sort algorithm organizes units by military rank
-4. **Final Formation**: Sorted units are displayed in South orientation (column-wise placement from bottom-left)
-
-The sorting is based on military hierarchy where lower rank numbers indicate higher priority in formation.
+1. **Parameter Parsing**: CLI arguments are validated and processed
+2. **Unit Creation**: Military units are generated based on distribution
+3. **Initial Placement**: Units are randomly positioned on the battlefield
+4. **Algorithm Execution**: Selected sorting algorithm organizes units by rank
+5. **Formation Placement**: Sorted units are arranged based on orientation
+6. **Visualization**: Both initial and final states are displayed
 
 ---
 
 ## 📋 Design Patterns Used
 
 ### Strategy Pattern
-The `SortingStrategy` interface allows for different sorting algorithms to be implemented and swapped easily:
-
 ```java
 public interface SortingStrategy {
     void sort(List<Character> units);
@@ -318,24 +314,23 @@ public interface SortingStrategy {
 ```
 
 ### Factory Pattern
-The `SortingStrategyFactory` creates appropriate sorting strategy instances:
-
 ```java
 public static SortingStrategy createStrategy(String algorithmCode) {
-    return switch (algorithmCode) {
+    return switch (algorithmCode.toLowerCase()) {
         case "i" -> new InsertionSort();
+        case "q" -> new QuickSort();
+        case "c" -> new CountingSort();
+        case "r" -> new RadixSort();
         default -> throw new IllegalArgumentException("Invalid algorithm code");
     };
 }
 ```
 
 ### Template Method Pattern
-The abstract `Character` class provides a template for all military units:
-
 ```java
-public abstract class Character {
-    // Common properties and methods
-    public abstract String getType();
+public abstract class Character implements Comparable<Character> {
+    // Common properties and ranking system
+    public abstract int getRank();
 }
 ```
 
@@ -343,29 +338,20 @@ public abstract class Character {
 
 ## 🏗️ Architecture Highlights
 
-### Layered Architecture
-- **CLI Layer**: Command-line parameter handling and validation
-- **Application Layer**: Main execution flow and orchestration
-- **Model Layer**: Core domain objects and battlefield representation
-- **Algorithm Layer**: Sorting strategy implementations
+### Enhanced CLI Layer
+- Comprehensive parameter validation
+- Default value handling
+- Error messaging and usage guidance
 
-### Key Components
+### Dynamic Battlefield Management
+- Configurable grid sizes
+- Multiple formation algorithms
+- Efficient unit placement strategies
 
-#### Battlefield Management
-- **Grid System**: 6x6 matrix for unit placement
-- **Random Placement**: Initial random distribution of units
-- **Formation Rendering**: ASCII visualization in both character and numeric modes
-- **South Orientation**: Final sorted placement follows military formation patterns
-
-#### Unit Hierarchy
-- **Rank-Based System**: Military hierarchy from Commander (0) to Infantry (4)
-- **Polymorphic Design**: All units extend the base `Character` class
-- **Position Management**: Each unit maintains its battlefield coordinates
-
-#### Algorithm Implementation
-- **Insertion Sort**: O(n²) time complexity, O(1) space complexity
-- **Stable Sorting**: Maintains relative order of equal-ranked units
-- **In-Place Sorting**: Sorts the unit list without additional memory overhead
+### Robust Unit System
+- Randomized display values within type ranges
+- Military hierarchy preservation
+- Position tracking and management
 
 ---
 
@@ -382,9 +368,10 @@ We welcome contributions! Please feel free to:
 ### Contribution Guidelines
 
 - Follow existing code style and conventions
-- Add appropriate unit tests for new functionality
+- Add comprehensive unit tests for new functionality
 - Update documentation and diagrams as needed
 - Ensure all tests pass before submitting PR
+- Include examples of new features in README
 
 ---
 
@@ -409,13 +396,13 @@ This project serves as an excellent educational resource for:
 
 ### Computer Science Concepts
 - **Algorithm Analysis**: Understanding time and space complexity
-- **Sorting Algorithms**: Practical implementation of Insertion Sort
+- **Sorting Algorithms**: Practical implementation and comparison
 - **Design Patterns**: Strategy, Factory, and Template Method patterns
 - **Object-Oriented Programming**: Inheritance, polymorphism, and encapsulation
 
 ### Software Engineering Practices
 - **Clean Architecture**: Separation of concerns and layered design
-- **Unit Testing**: Custom test implementations and validation
+- **Unit Testing**: Test-driven development practices
 - **Build Management**: Maven configuration and dependency management
 - **Documentation**: Comprehensive README and code documentation
 
@@ -432,8 +419,8 @@ This project serves as an excellent educational resource for:
 
 Made with ❤️ for algorithmic learning
 
-[![GitHub issues](https://img.shields.io/github/issues/Jala-University/march-of-the-Legion)](https://github.com/yourusername/march-of-the-legion/issues)
-[![GitHub forks](https://img.shields.io/github/forks/Jala-University/march-of-the-Legion)](https://github.com/yourusername/march-of-the-legion/network)
-[![GitHub stars](https://img.shields.io/github/stars/Jala-University/march-of-the-Legion)](https://github.com/yourusername/march-of-the-legion/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/Jala-University/march-of-the-Legion)](https://github.com/Jala-University/march-of-the-Legion/issues)
+[![GitHub forks](https://img.shields.io/github/forks/Jala-University/march-of-the-Legion)](https://github.com/Jala-University/march-of-the-Legion/network)
+[![GitHub stars](https://img.shields.io/github/stars/Jala-University/march-of-the-Legion)](https://github.com/Jala-University/march-of-the-Legion/stargazers)
 
 </div>

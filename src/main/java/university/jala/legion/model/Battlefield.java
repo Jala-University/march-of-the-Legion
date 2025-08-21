@@ -1,132 +1,136 @@
-// Represents the battlefield grid and manages unit placement.
-
 package university.jala.legion.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The Battlefield class manages the grid, unit placement, and display logic.
+ * It is responsible for creating a square battlefield of a given size,
+ * placing units randomly or in a sorted formation, and rendering the grid.
+ */
 public class Battlefield {
     private final int size;
-    private final Character[][] grid;
-    private final List<Character> units;
-    private final Random random;
+    private final String[][] grid;
+    private final List<Position> availablePositions;
+    private final List<Character> currentUnits;
 
     public Battlefield(int size) {
         this.size = size;
-        this.grid = new Character[size][size];
-        this.units = new ArrayList<>();
-        this.random = new Random();
+        this.grid = new String[size][size];
+        this.availablePositions = new ArrayList<>();
+        this.currentUnits = new ArrayList<>();
+        initializeGrid();
     }
 
     /**
-     * Places units randomly on the battlefield.
-     * @param units List of units to place
+     * Fills the battlefield with empty positions.
+     */
+    private void initializeGrid() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                grid[i][j] = "*";
+                availablePositions.add(new Position(i, j));
+            }
+        }
+    }
+
+    /**
+     * Places a list of units randomly on the battlefield grid.
+     * @param units The list of units to place.
      */
     public void placeUnitsRandomly(List<Character> units) {
-        this.units.clear();
-        this.units.addAll(units);
+        // Shuffle the available positions to ensure randomness
+        Collections.shuffle(availablePositions);
 
-        // Clear the grid
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                grid[i][j] = null;
-            }
+        if (units.size() > availablePositions.size()) {
+            throw new IllegalArgumentException("Cannot place more units than the battlefield size allows.");
         }
 
-        // Place each unit randomly
-        for (Character unit : units) {
-            Position position;
-            do {
-                position = new Position(random.nextInt(size), random.nextInt(size));
-            } while (!isPositionEmpty(position));
-            placeUnit(unit, position);
+        for (int i = 0; i < units.size(); i++) {
+            Character unit = units.get(i);
+            Position pos = availablePositions.get(i);
+            grid[pos.getX()][pos.getY()] = unit.getDisplayValue();
+            unit.setPosition(pos);
+            currentUnits.add(unit);
         }
-    }
-
-    private boolean isPositionEmpty(Position position) {
-        return grid[position.getRow()][position.getColumn()] == null;
-    }
-
-    private void placeUnit(Character unit, Position position) {
-        grid[position.getRow()][position.getColumn()] = unit;
-        unit.setPosition(position);
     }
 
     /**
-     * Renders the initial battlefield in ASCII format.
-     * @param useNumeric Whether to use numeric representation
-     * @return String representation of the battlefield
+     * Places a list of sorted units in a specific formation based on orientation.
+     * @param units The list of units, already sorted.
+     * @param orientation The formation orientation (n, s, e, w).
      */
-    public String renderInitial(boolean useNumeric) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                Character unit = grid[i][j];
-                if (unit == null) {
-                    sb.append("* ");
-                } else {
-                    if (useNumeric) {
-                        sb.append(unit.getNumericRange()).append(" ");
-                    } else {
-                        sb.append(unit.getSymbol()).append(" ");
-                    }
-                }
-            }
-            sb.append("\n");
-        }
-        return sb.toString().trim();
-    }
+    public void placeUnitsInFormation(List<Character> units, String orientation) {
+        initializeGrid(); // Clear the battlefield for the final placement
 
-    /**
-     * Renders the final battlefield in ASCII format with the new positions.
-     * This method now handles the fixed South orientation.
-     * @param useNumeric Whether to use numeric representation
-     * @return String representation of the battlefield
-     */
-    public String renderFinal(boolean useNumeric) {
-        StringBuilder sb = new StringBuilder();
-        // Clear the grid to place the sorted units
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                grid[i][j] = null;
-            }
-        }
-
-        // Place sorted units. The example shows a South orientation.
-        // Units are sorted from lowest rank to highest (e.g., C, M, T, S, I)
-        // They are placed from bottom-left to top-right.
         int unitIndex = 0;
-        for (int j = 0; j < size; j++) { // Column
-            for (int i = size - 1; i >= 0; i--) { // Row (from bottom)
-                if (unitIndex < units.size()) {
-                    grid[i][j] = units.get(unitIndex);
-                    unitIndex++;
-                }
-            }
-        }
-
-        // Render the final grid
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                Character unit = grid[i][j];
-                if (unit == null) {
-                    sb.append("* ");
-                } else {
-                    if (useNumeric) {
-                        sb.append(unit.getNumericRange()).append(" ");
-                    } else {
-                        sb.append(unit.getSymbol()).append(" ");
+        switch (orientation.toLowerCase()) {
+            case "s": // South: Fill from bottom-left, column by column
+                for (int col = 0; col < size; col++) {
+                    for (int row = size - 1; row >= 0; row--) {
+                        if (unitIndex < units.size()) {
+                            grid[row][col] = units.get(unitIndex++).getDisplayValue();
+                        }
                     }
                 }
-            }
-            sb.append("\n");
+                break;
+            case "n": // North: Fill from top-left, column by column
+                for (int col = 0; col < size; col++) {
+                    for (int row = 0; row < size; row++) {
+                        if (unitIndex < units.size()) {
+                            grid[row][col] = units.get(unitIndex++).getDisplayValue();
+                        }
+                    }
+                }
+                break;
+            case "w": // West: Fill from top-left, row by row
+                for (int row = 0; row < size; row++) {
+                    for (int col = 0; col < size; col++) {
+                        if (unitIndex < units.size()) {
+                            grid[row][col] = units.get(unitIndex++).getDisplayValue();
+                        }
+                    }
+                }
+                break;
+            case "e": // East: Fill from top-right, row by row
+                for (int row = 0; row < size; row++) {
+                    for (int col = size - 1; col >= 0; col--) {
+                        if (unitIndex < units.size()) {
+                            grid[row][col] = units.get(unitIndex++).getDisplayValue();
+                        }
+                    }
+                }
+                break;
         }
-        return sb.toString().trim();
     }
 
+    /**
+     * Renders the initial battlefield state to the console.
+     * @param isNumeric True if rendering in numeric format, false for character.
+     */
+    public void renderInitial(boolean isNumeric) {
+        render();
+    }
 
-    public List<Character> getUnits() {
-        return new ArrayList<>(units);
+    /**
+     * Renders the final battlefield state to the console.
+     * @param isNumeric True if rendering in numeric format, false for character.
+     */
+    public void renderFinal(boolean isNumeric) {
+        render();
+    }
+
+    /**
+     * Private helper method to handle the actual grid rendering.
+     */
+    private void render() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.printf("%-4s", grid[i][j]);
+            }
+            System.out.println();
+        }
     }
 }

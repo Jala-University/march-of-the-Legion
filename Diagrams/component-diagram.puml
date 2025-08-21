@@ -3,14 +3,17 @@
 skinparam componentFontSize 12
 skinparam packageFontSize 14
 
-title March of the Legion - Component Architecture
+title March of the Legion - Enhanced Component Architecture
 
 package "CLI Layer" {
     component [Parameters] as CLI
     note right of CLI
-        • Command-line argument parser
-        • Parameter validation
-        • Configuration management
+        • Enhanced command-line argument parser
+        • Comprehensive parameter validation
+        • Support for new parameters:
+          - o (orientation: n,s,e,w)
+          - f (battlefield size: 5-1000)
+        • Default value handling
     end note
 }
 
@@ -18,8 +21,9 @@ package "Application Layer" {
     component [Main] as APP
     note right of APP
         • Application entry point
-        • Orchestrates execution flow
-        • Unit creation and management
+        • Orchestrates enhanced execution flow
+        • Dynamic unit creation with type parameter
+        • Formation orientation management
     end note
 }
 
@@ -39,14 +43,19 @@ package "Model Layer" {
     }
 
     note right of FIELD
-        • 6x6 grid management
-        • Unit placement logic
-        • ASCII rendering
+        • Dynamic grid management (5x5 to 1000x1000)
+        • Multiple formation algorithms:
+          - North, South, East, West
+        • Randomized unit placement
+        • Enhanced ASCII rendering
     end note
 
     note right of CHAR
-        • Abstract base class
-        • Rank-based hierarchy
+        • Abstract base class with Comparable
+        • Rank-based military hierarchy
+        • Dynamic display values:
+          - Character mode: random letters
+          - Numeric mode: random numbers
         • Position management
     end note
 }
@@ -54,16 +63,28 @@ package "Model Layer" {
 package "Algorithm Layer" {
     component [SortingStrategy] as STRATEGY
     component [InsertionSort] as INSERTION
+    component [QuickSort] as QUICKSORT
+    component [CountingSort] as COUNTING
+    component [RadixSort] as RADIX
     component [SortingStrategyFactory] as FACTORY
 
     note right of STRATEGY
         • Strategy pattern interface
-        • Extensible for new algorithms
+        • Prepared for multiple algorithms
+        • Extensible architecture
     end note
 
     note right of INSERTION
         • O(n²) sorting implementation
         • Rank-based comparison
+        • Stable in-place sorting
+    end note
+
+    note right of FACTORY
+        • Factory pattern implementation
+        • Creates algorithm instances
+        • Supports: i=Insertion, q=Quick
+                  c=Counting, r=Radix
     end note
 }
 
@@ -87,17 +108,26 @@ CHAR <.. INF : extends
 CHAR ..> POS : has
 
 STRATEGY <.. INSERTION : implements
+STRATEGY <.. QUICKSORT : implements
+STRATEGY <.. COUNTING : implements
+STRATEGY <.. RADIX : implements
+
 FACTORY ..> STRATEGY : creates
 FACTORY ..> INSERTION : instantiates
+FACTORY ..> QUICKSORT : instantiates
+FACTORY ..> COUNTING : instantiates
+FACTORY ..> RADIX : instantiates
 
 ' Interfaces
-interface "Command Line\nInterface" as CLIInterface
-interface "Sorting\nAlgorithms" as SortInterface
-interface "Unit\nManagement" as UnitInterface
+interface "Enhanced Command Line\nInterface" as CLIInterface
+interface "Sorting Algorithms\nFramework" as SortInterface
+interface "Dynamic Unit\nManagement" as UnitInterface
+interface "Configurable\nBattlefield" as FieldInterface
 
 CLIInterface -- CLI
 SortInterface -- STRATEGY
 UnitInterface -- CHAR
+FieldInterface -- FIELD
 
 ' External dependencies
 [Java Runtime\nEnvironment] as JRE
@@ -105,5 +135,23 @@ UnitInterface -- CHAR
 
 APP ..> JRE : runs on
 MAVEN ..> APP : builds
+
+' Data flow notes
+note top of APP
+    Processes enhanced parameters:
+    • Algorithm selection
+    • Unit distribution
+    • Display type (character/numeric)
+    • Formation orientation
+    • Battlefield size
+end note
+
+note bottom of FIELD
+    Supports multiple formation patterns:
+    • North: top-left, column-wise
+    • South: bottom-left, column-wise
+    • East: top-right, row-wise
+    • West: top-left, row-wise
+end note
 
 @enduml

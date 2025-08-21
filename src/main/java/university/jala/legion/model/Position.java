@@ -1,40 +1,23 @@
+// Represents a position on the battlefield grid.
 package university.jala.legion.model;
 
 /**
- * Represents a position on the battlefield.
+ * The Position class represents a single coordinate on the battlefield grid.
  */
 public class Position {
-    private final int row;
-    private final int column;
+    private final int x;
+    private final int y;
 
-    public Position(int row, int column) {
-        this.row = row;
-        this.column = column;
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public int getRow() {
-        return row;
+    public int getX() {
+        return x;
     }
 
-    public int getColumn() {
-        return column;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Position position = (Position) obj;
-        return row == position.row && column == position.column;
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * row + column;
-    }
-
-    @Override
-    public String toString() {
-        return "(" + row + "," + column + ")";
+    public int getY() {
+        return y;
     }
 }

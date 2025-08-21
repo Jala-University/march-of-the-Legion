@@ -12,10 +12,10 @@ public class PositionTest {
         System.out.println("\n--- Test 1: Constructor and Getters ---");
         Position pos1 = new Position(2, 3);
         runTest("Constructor and getters",
-                pos1.getRow() == 2 && pos1.getColumn() == 3,
+                pos1.getX() == 2 && pos1.getY() == 3,
                 "Position(2, 3)",
-                "Expected row: 2, actual row: " + pos1.getRow() +
-                        " | Expected column: 3, actual column: " + pos1.getColumn());
+                "Expected row: 2, actual row: " + pos1.getX() +
+                        " | Expected column: 3, actual column: " + pos1.getY());
 
         // Test Case 2: Equality with same position
         System.out.println("\n--- Test 2: Equality with Same Position ---");

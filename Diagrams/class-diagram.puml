@@ -7,105 +7,99 @@ skinparam packageFontSize 14
 package "university.jala.legion" {
     class Main {
         +main(String[] args)
-        -createUnits(int[] distribution) : List<Character>
+        -createUnits(int[] distribution, String type) : List<Character>
         -calculateTotalTroops(int[] distribution) : int
+        -getOrientationName(String orientation) : String
     }
 }
 
 package "university.jala.legion.cli" {
     class Parameters {
-        -parameters : Map<String, String>
+        -algorithm : String
+        -type : String
+        -orientation : String
+        -unitDistribution : int[]
+        -battlefieldSize : int
         +Parameters(String[] args)
-        -parseArgs(String[] args)
+        -parseUnitDistribution(String value) : int[]
+        -parseBattlefieldSize(String value) : int
         -validateParameters()
-        -validateType()
-        -validateUnitDistribution()
+        -isValidAlgorithm(String code) : boolean
+        +getAlgorithm() : String
         +getType() : String
+        +getOrientation() : String
         +getUnitDistribution() : int[]
+        +getBattlefieldSize() : int
     }
 }
 
 package "university.jala.legion.model" {
     abstract class Character {
+        -type : String
         -rank : int
+        -numericValue : String
+        -characterValue : String
         -position : Position
-        -symbol : char
-        -numericRange : int
-        #Character(int rank, char symbol, int numericRange)
+        +Character(String type)
         +getRank() : int
+        +getDisplayValue() : String
         +getPosition() : Position
         +setPosition(Position position)
-        +getSymbol() : char
-        +getNumericRange() : int
-        +{abstract}getType() : String
-        +toString() : String
+        +compareTo(Character other) : int
     }
 
     class Position {
-        -row : int
-        -column : int
-        +Position(int row, int column)
-        +getRow() : int
-        +getColumn() : int
-        +equals(Object obj) : boolean
-        +hashCode() : int
-        +toString() : String
+        -x : int
+        -y : int
+        +Position(int x, int y)
+        +getX() : int
+        +getY() : int
     }
 
     class Battlefield {
         -size : int
-        -grid : Character[][]
-        -units : List<Character>
-        -random : Random
+        -grid : String[][]
+        -availablePositions : List<Position>
+        -currentUnits : List<Character>
         +Battlefield(int size)
+        -initializeGrid()
         +placeUnitsRandomly(List<Character> units)
-        -isPositionEmpty(Position position) : boolean
-        -placeUnit(Character unit, Position position)
-        +renderInitial(boolean useNumeric) : String
-        +renderFinal(boolean useNumeric) : String
-        +getUnits() : List<Character>
+        +placeUnitsInFormation(List<Character> units, String orientation)
+        +renderInitial(boolean isNumeric)
+        +renderFinal(boolean isNumeric)
+        -render()
     }
 }
 
 package "university.jala.legion.model.units" {
     class Commander {
-        -{static}RANK : int = 0
-        -{static}SYMBOL : char = 'C'
-        -{static}NUMERIC_RANGE : int = 1
-        +Commander()
-        +getType() : String
+        +Commander(String type)
+        -getRandomNumericValue(int min, int max) : String
+        -getRandomCharacterValue(char min, char max) : String
     }
 
     class Medic {
-        -{static}RANK : int = 1
-        -{static}SYMBOL : char = 'M'
-        -{static}NUMERIC_RANGE : int = 2
-        +Medic()
-        +getType() : String
+        +Medic(String type)
+        -getRandomNumericValue(int min, int max) : String
+        -getRandomCharacterValue(char min, char max) : String
     }
 
     class Tank {
-        -{static}RANK : int = 2
-        -{static}SYMBOL : char = 'T'
-        -{static}NUMERIC_RANGE : int = 3
-        +Tank()
-        +getType() : String
+        +Tank(String type)
+        -getRandomNumericValue(int min, int max) : String
+        -getRandomCharacterValue(char min1, char max1, char min2, char max2) : String
     }
 
     class Sniper {
-        -{static}RANK : int = 3
-        -{static}SYMBOL : char = 'S'
-        -{static}NUMERIC_RANGE : int = 4
-        +Sniper()
-        +getType() : String
+        +Sniper(String type)
+        -getRandomNumericValue(int min, int max) : String
+        -getRandomCharacterValue(char min1, char max1, char min2, char max2) : String
     }
 
     class Infantry {
-        -{static}RANK : int = 4
-        -{static}SYMBOL : char = 'I'
-        -{static}NUMERIC_RANGE : int = 5
-        +Infantry()
-        +getType() : String
+        +Infantry(String type)
+        -getRandomNumericValue(int min, int max) : String
+        -getRandomCharacterValue(char min, char max) : String
     }
 }
 
@@ -120,6 +114,21 @@ package "university.jala.legion.sorting" {
         +getName() : String
     }
 
+    class QuickSort {
+        +sort(List<Character> units)
+        +getName() : String
+    }
+
+    class CountingSort {
+        +sort(List<Character> units)
+        +getName() : String
+    }
+
+    class RadixSort {
+        +sort(List<Character> units)
+        +getName() : String
+    }
+
     class SortingStrategyFactory {
         +{static}createStrategy(String algorithmCode) : SortingStrategy
     }
@@ -129,7 +138,7 @@ package "university.jala.legion.sorting" {
 Main --> Parameters : uses
 Main --> Battlefield : creates
 Main --> Character : manages
-Main --> SortingStrategy : uses
+Main --> SortingStrategyFactory : uses
 
 Parameters --> Main : provides configuration
 
@@ -145,7 +154,16 @@ Battlefield --> Character : contains
 Battlefield --> Position : uses
 
 SortingStrategy <|.. InsertionSort
+SortingStrategy <|.. QuickSort
+SortingStrategy <|.. CountingSort
+SortingStrategy <|.. RadixSort
+
 SortingStrategyFactory --> SortingStrategy : creates
 SortingStrategyFactory --> InsertionSort : instantiates
+SortingStrategyFactory --> QuickSort : instantiates
+SortingStrategyFactory --> CountingSort : instantiates
+SortingStrategyFactory --> RadixSort : instantiates
+
+Main --> SortingStrategy : uses via factory
 
 @enduml

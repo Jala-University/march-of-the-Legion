@@ -3,7 +3,7 @@
 skinparam nodeFontSize 12
 skinparam componentFontSize 10
 
-title March of the Legion - Deployment Architecture
+title March of the Legion - Enhanced Deployment Architecture
 
 node "Development Environment" as DevEnv {
 
@@ -12,21 +12,21 @@ node "Development Environment" as DevEnv {
         artifact "pom.xml" as POM
         artifact "Source Code" as SRC
 
-        Maven --> POM : reads configuration
-        Maven --> SRC : compiles
+        Maven --> POM : reads enhanced configuration
+        Maven --> SRC : compiles with Java 24
     }
 
     node "Java Runtime" as JRE {
         component [Java 24+ JVM] as JVM
         artifact "legion-1.0-SNAPSHOT.jar" as JAR
-        component [Main Application] as MainApp
+        component [Enhanced Main Application] as MainApp
 
         JVM --> JAR : loads & executes
         JAR --> MainApp : contains
     }
 
     node "File System" as FS {
-        folder "Project Structure" as ProjectFS {
+        folder "Enhanced Project Structure" as ProjectFS {
             artifact "README.md" as README
             artifact "Diagrams/*.puml" as Diagrams
             folder "src/main/java" as MainSrc
@@ -43,56 +43,82 @@ node "User Environment" as UserEnv {
 
 cloud "Version Control" as VCS {
     component [Git Repository] as Git
-    artifact "Source Code" as GitSrc
+    artifact "Enhanced Source Code" as GitSrc
 }
 
 ' Build process
-Maven --> JAR : generates
-Maven --> Target : outputs to
+Maven --> JAR : generates enhanced JAR
+Maven --> Target : outputs compiled artifacts
 
 ' User interactions
-User --> Terminal : executes commands
-Terminal --> JVM : java -jar legion.jar
-User --> IDE : development (optional)
-IDE --> Maven : build commands
+User --> Terminal : executes enhanced commands
+Terminal --> JVM : java -jar legion.jar a=i u=2,1,1,1,3 t=c o=s f=8
+User --> IDE : development with new features
+IDE --> Maven : build and test commands
 
 ' Version control
-FS --> Git : commits/pushes
-Git --> FS : clones/pulls
+FS --> Git : commits/pushes enhanced code
+Git --> FS : clones/pulls updates
 
 ' Execution flow
-Terminal --> MainApp : command line arguments
-MainApp --> Terminal : console output
+Terminal --> MainApp : enhanced command line arguments
+MainApp --> Terminal : console output with new features
 
 ' Deployment notes
 note right of JAR
-    **Executable JAR contains:**
-    • Main application classes
-    • Unit implementations
-    • Sorting algorithms
-    • CLI parameter handling
+    **Enhanced Executable JAR contains:**
+    • Main application with new parameters
+    • Unit implementations with random values
+    • Sorting algorithms framework
+    • Enhanced CLI parameter validation
+    • Dynamic battlefield management
+    • Multiple formation algorithms
 
-    **Execution modes:**
-    • Direct JAR execution
-    • Maven exec plugin
-    • IDE execution
+    **Extended Execution modes:**
+    • Direct JAR with full parameter set
+    • Maven exec with enhanced arguments
+    • IDE execution with new features
 end note
 
 note left of Maven
-    **Build artifacts:**
-    • Compiled classes (target/classes)
-    • Test classes (target/test-classes)
-    • Packaged JAR (target/*.jar)
+    **Enhanced Build artifacts:**
+    • Compiled classes with new features
+    • Test classes for enhanced functionality
+    • Packaged JAR with extended capabilities
 
     **Dependencies:**
     • JUnit Jupiter (test scope)
-    • Java 24 runtime
+    • Java 24 runtime features
+    • Enhanced validation logic
 end note
 
 note bottom of User
-    **Usage examples:**
-    java -jar legion.jar a=i u=2,1,1,1,3 t=c
-    mvn exec:java "-Dexec.args=a=i u=1,1,1,1,1 t=n"
+    **Enhanced Usage examples:**
+    java -jar legion.jar a=i u=2,1,1,1,3 t=c o=s f=8
+    java -jar legion.jar a=i u=1,2,3,2,1 t=n o=n f=10
+    mvn exec:java "-Dexec.args=a=i u=5,5,5,5,5 t=c o=e f=12"
+    mvn exec:java "-Dexec.args=a=i u=1,1,1,1,1 t=c o=w f=6"
 end note
+
+note top of MainApp
+    **New Parameter Support:**
+    • a = algorithm (i=insertion, q=quick, c=counting, r=radix)
+    • u = unit distribution (5 comma-separated values)
+    • t = display type (c=character, n=numeric)
+    • o = orientation (n=north, s=south, e=east, w=west)
+    • f = battlefield size (5-1000, default=6)
+end note
+
+' Testing components
+node "Testing Framework" as Test {
+    component [Custom Test Runner] as TestRunner
+    artifact "Test Classes" as TestClasses
+
+    TestRunner --> TestClasses : executes
+    TestClasses --> MainSrc : tests
+}
+
+Maven --> TestRunner : executes tests
+TestRunner --> Terminal : outputs test results
 
 @enduml

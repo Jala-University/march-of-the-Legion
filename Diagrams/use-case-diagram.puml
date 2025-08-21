@@ -6,17 +6,19 @@ skinparam usecase {
     BorderColor darkblue
 }
 
-title March of the Legion - Use Case Diagram
+title March of the Legion - Enhanced Use Case Diagram
 
 actor "Developer/Student" as User
 actor "Educator" as Teacher
 
-rectangle "March of the Legion System" {
+rectangle "Enhanced March of the Legion System" {
 
     package "Core Simulation" {
-        usecase "Execute Battlefield\nSimulation" as UC1
+        usecase "Execute Enhanced\nBattlefield Simulation" as UC1
         usecase "Configure Unit\nDistribution" as UC2
         usecase "Select Display\nType" as UC3
+        usecase "Set Formation\nOrientation" as UC16
+        usecase "Configure Battlefield\nSize" as UC17
         usecase "View Initial\nFormation" as UC4
         usecase "Apply Sorting\nAlgorithm" as UC5
         usecase "View Final\nFormation" as UC6
@@ -26,18 +28,21 @@ rectangle "March of the Legion System" {
         usecase "Demonstrate\nInsertion Sort" as UC7
         usecase "Visualize Sorting\nProcess" as UC8
         usecase "Compare Before/After\nStates" as UC9
+        usecase "Explore Multiple\nAlgorithms" as UC18
     }
 
     package "System Management" {
-        usecase "Validate Input\nParameters" as UC10
+        usecase "Validate Enhanced\nInput Parameters" as UC10
         usecase "Handle Error\nConditions" as UC11
         usecase "Generate Console\nOutput" as UC12
+        usecase "Manage Random\nDisplay Values" as UC19
     }
 
     package "Educational Features" {
         usecase "Learn Algorithm\nComplexity" as UC13
         usecase "Understand Military\nHierarchy" as UC14
-        usecase "Study Code\nArchitecture" as UC15
+        usecase "Study Enhanced\nCode Architecture" as UC15
+        usecase "Explore Formation\nPatterns" as UC20
     }
 }
 
@@ -45,10 +50,14 @@ rectangle "March of the Legion System" {
 User --> UC1 : initiates
 User --> UC2 : specifies units
 User --> UC3 : chooses display mode
+User --> UC16 : selects orientation
+User --> UC17 : sets battlefield size
 
 ' Core simulation flow
 UC1 ..> UC2 : <<include>>
 UC1 ..> UC3 : <<include>>
+UC1 ..> UC16 : <<include>>
+UC1 ..> UC17 : <<include>>
 UC1 ..> UC4 : <<include>>
 UC1 ..> UC5 : <<include>>
 UC1 ..> UC6 : <<include>>
@@ -57,55 +66,84 @@ UC1 ..> UC6 : <<include>>
 UC1 ..> UC7 : <<include>>
 UC7 ..> UC8 : <<include>>
 UC8 ..> UC9 : <<include>>
+UC1 ..> UC18 : <<include>>
 
 ' System management
 UC1 ..> UC10 : <<include>>
 UC1 ..> UC11 : <<extend>>
 UC1 ..> UC12 : <<include>>
+UC1 ..> UC19 : <<include>>
 
 ' Educational aspects
 Teacher --> UC13 : teaches with
 Teacher --> UC14 : explains using
 Teacher --> UC15 : demonstrates
+Teacher --> UC20 : instructs on
 
 UC7 ..> UC13 : supports
 UC4 ..> UC14 : shows
 UC6 ..> UC14 : shows
 UC1 ..> UC15 : exemplifies
+UC16 ..> UC20 : enables
+UC17 ..> UC20 : enables
 
 ' Alternative flows
 UC2 ..> UC11 : <<extend>> : invalid distribution
 UC3 ..> UC11 : <<extend>> : invalid type
+UC16 ..> UC11 : <<extend>> : invalid orientation
+UC17 ..> UC11 : <<extend>> : invalid size
 UC10 ..> UC11 : <<extend>> : validation fails
 
 note right of UC1
-    **Main Success Scenario:**
-    1. Parse command line parameters
-    2. Create and place units randomly
-    3. Display initial formation
-    4. Sort units by military rank
-    5. Display final formation
+    **Enhanced Success Scenario:**
+    1. Parse enhanced command line parameters
+    2. Validate battlefield capacity
+    3. Create units with random display values
+    4. Place units randomly on dynamic battlefield
+    5. Display initial formation
+    6. Sort units by military rank
+    7. Place in selected orientation
+    8. Display final formation
 end note
 
 note left of UC7
-    **Algorithm Details:**
-    • Time Complexity: O(n²)
-    • Space Complexity: O(1)
-    • Stable sorting algorithm
-    • Rank-based comparison
+    **Algorithm Framework:**
+    • Insertion Sort (implemented)
+    • Quick Sort (prepared)
+    • Counting Sort (prepared)
+    • Radix Sort (prepared)
+    • O(n²) time, O(1) space
+    • Stable sorting
 end note
 
 note bottom of UC2
-    **Parameter Format:**
+    **Enhanced Parameter Format:**
     u=commander,medic,tank,sniper,infantry
     Example: u=2,1,1,1,3
-    Max total: 36 units (6x6 grid)
+    Max total: f*f units (dynamic grid)
 end note
 
 note top of UC3
-    **Display Types:**
-    • Character mode (t=c): C, M, T, S, I
-    • Numeric mode (t=n): 1, 2, 3, 4, 5
+    **Enhanced Display Types:**
+    • Character mode (t=c): random letters
+      (a-j, k-t, u-z+A-J, O-X)
+    • Numeric mode (t=n): random numbers
+      (1-10, 11-20, 21-30, 31-40, 41-50)
+end note
+
+note right of UC16
+    **Formation Orientations:**
+    • North (o=n): top-left, column-wise
+    • South (o=s): bottom-left, column-wise
+    • East (o=e): top-right, row-wise
+    • West (o=w): top-left, row-wise
+end note
+
+note left of UC17
+    **Battlefield Sizes:**
+    • Configurable: 5x5 to 1000x1000
+    • Default: 6x6
+    • Validated capacity checking
 end note
 
 @enduml
