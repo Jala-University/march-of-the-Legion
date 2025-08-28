@@ -11,15 +11,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for the {@link InsertionSort} class.
+ * Unit tests for the {@link RadixSort} class.
  */
-class InsertionSortTest {
+class RadixSortTest {
 
-    private InsertionSort insertionSort;
+    private RadixSort radixSort;
 
     @BeforeEach
     void setUp() {
-        insertionSort = new InsertionSort();
+        radixSort = new RadixSort();
     }
 
     private ICharacter createMockUnit(int rank) {
@@ -37,7 +37,7 @@ class InsertionSortTest {
         units.add(createMockUnit(2));
         units.add(createMockUnit(0));
 
-        insertionSort.sort(units);
+        radixSort.sort(units);
 
         assertEquals(0, units.get(0).getRank());
         assertEquals(1, units.get(1).getRank());
@@ -54,7 +54,7 @@ class InsertionSortTest {
         units.add(createMockUnit(2));
         units.add(createMockUnit(0));
 
-        insertionSort.sort(units);
+        radixSort.sort(units);
 
         assertEquals(0, units.get(0).getRank());
         assertEquals(1, units.get(1).getRank());
@@ -66,7 +66,7 @@ class InsertionSortTest {
     void testSortWithEmptyList() {
         // It should not throw an exception for an empty list.
         List<ICharacter> units = new ArrayList<>();
-        assertDoesNotThrow(() -> insertionSort.sort(units));
+        assertDoesNotThrow(() -> radixSort.sort(units));
     }
 
     @Test
@@ -74,8 +74,8 @@ class InsertionSortTest {
         // It should correctly handle a list with a single unit.
         List<ICharacter> units = new ArrayList<>();
         units.add(createMockUnit(5));
-        insertionSort.sort(units);
+        radixSort.sort(units);
         assertEquals(1, units.size());
-        assertEquals(5, units.getFirst().getRank());
+        assertEquals(5, units.get(0).getRank());
     }
 }
