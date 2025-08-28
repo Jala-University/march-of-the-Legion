@@ -1,28 +1,35 @@
 package university.jala.legion.cli;
 
+import university.jala.legion.cli.validation.ParameterValidator;
+import university.jala.legion.cli.validation.ParameterValidatorFactory;
+
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Handles command-line parameters for the March of the Legion simulator.
+ * Handles and validates the command-line parameters for the March of the Legion simulator.
+ * This class is responsible for parsing, validating, and providing access to the simulation parameters.
  */
-public class Parameters {
+public class Parameters implements CliParameters {
     private final Map<String, String> parameters;
 
-    // Default values
     private static final String DEFAULT_BATTLEFIELD_SIZE = "10";
     private static final String DEFAULT_ORIENTATION = "n";
     private static final String DEFAULT_TYPE = "c";
 
     /**
-     * Creates a Parameters instance from command-line arguments.
-     * @param args Command-line arguments in format key=value
+     * Constructs a new Parameters instance from the given command-line arguments.
+     * It parses the arguments, sets default values for missing optional parameters,
+     * and validates all parameters.
+     *
+     * @param args The command-line arguments in key=value format.
      */
     public Parameters(String[] args) {
         parameters = new HashMap<>();
         parseArgs(args);
-        validateRequiredParameters();
+        validateParameters();
     }
 
     private void parseArgs(String[] args) {
@@ -33,99 +40,39 @@ public class Parameters {
                     parameters.put(parts[0].toLowerCase(), parts[1].toLowerCase());
                 });
 
-        // Set defaults if not provided
         parameters.putIfAbsent("f", DEFAULT_BATTLEFIELD_SIZE);
         parameters.putIfAbsent("o", DEFAULT_ORIENTATION);
         parameters.putIfAbsent("t", DEFAULT_TYPE);
     }
 
-    private void validateRequiredParameters() {
-        if (!parameters.containsKey("a")) {
-            throw new IllegalArgumentException("Sorting algorithm parameter 'a' is required");
-        }
-        if (!parameters.containsKey("u")) {
-            throw new IllegalArgumentException("Unit distribution parameter 'u' is required");
-        }
-        validateAlgorithm();
-        validateOrientation();
-        validateType();
-        validateBattlefieldSize();
-        validateUnitDistribution();
-    }
-
-    private void validateAlgorithm() {
-        String algorithm = parameters.get("a");
-        // Updated validation regex to accept only the four specified algorithms
-        if (!algorithm.matches("[criq]")) {
-            throw new IllegalArgumentException("Invalid sorting algorithm code. Valid codes are: c (Counting), r (Radix), i (Insertion), q (Quick)");
+    private void validateParameters() {
+        List<ParameterValidator> validators = ParameterValidatorFactory.createValidators();
+        for (ParameterValidator validator : validators) {
+            validator.validate(parameters);
         }
     }
 
-    private void validateOrientation() {
-        String orientation = parameters.get("o");
-        if (!orientation.matches("[nsew]")) {
-            throw new IllegalArgumentException("Invalid orientation code: " + orientation);
-        }
-    }
-
-    private void validateType() {
-        String type = parameters.get("t");
-        if (!type.matches("[cn]")) {
-            throw new IllegalArgumentException("Invalid display type code: " + type);
-        }
-    }
-
-    private void validateBattlefieldSize() {
-        try {
-            int size = Integer.parseInt(parameters.get("f"));
-            if (size < 5 || size > 1000) {
-                throw new IllegalArgumentException("Battlefield size must be between 5 and 1000");
-            }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid battlefield size format");
-        }
-    }
-
-    private void validateUnitDistribution() {
-        String distribution = parameters.get("u");
-        String[] units = distribution.split(",");
-        if (units.length != 5) {
-            throw new IllegalArgumentException("Unit distribution must specify 5 unit types");
-        }
-        int totalUnits = 0;
-        try {
-            for (String unit : units) {
-                int count = Integer.parseInt(unit);
-                if (count < 0) {
-                    throw new IllegalArgumentException("Unit counts cannot be negative");
-                }
-                totalUnits += count;
-            }
-            int battlefieldSize = Integer.parseInt(parameters.get("f"));
-            if (totalUnits > battlefieldSize * battlefieldSize) {
-                throw new IllegalArgumentException("Total units exceed battlefield capacity");
-            }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid unit count format");
-        }
-    }
-
+    @Override
     public String getAlgorithm() {
         return parameters.get("a");
     }
 
+    @Override
     public String getOrientation() {
         return parameters.get("o");
     }
 
+    @Override
     public String getType() {
         return parameters.get("t");
     }
 
+    @Override
     public int getBattlefieldSize() {
         return Integer.parseInt(parameters.get("f"));
     }
 
+    @Override
     public int[] getUnitDistribution() {
         return Arrays.stream(parameters.get("u").split(","))
                 .mapToInt(Integer::parseInt)
