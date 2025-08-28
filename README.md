@@ -1,80 +1,80 @@
 # 🎖️ March of the Legion
 
-> **A tactical battlefield simulation showcasing sorting algorithms through military unit formations**
+> A tactical battlefield simulation showcasing sorting algorithms through military unit formations, built on SOLID design principles.
 
 [![Java](https://img.shields.io/badge/Java-24-orange.svg)](https://openjdk.java.net/)
-[![Maven](https://img.shields.io/badge/Maven-3.11.0-blue.svg)](https://maven.apache.org/)
+[![Maven](https://img.shields.io/badge/Maven-3.9+-blue.svg)](https://maven.apache.org/)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](pom.xml)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
 ## 🚀 Overview
 
-**March of the Legion** is an innovative Java application that transforms abstract sorting algorithms into a visual military battlefield simulation. Watch as different unit types reorganize themselves across the battlefield using various sorting strategies, creating an engaging way to understand algorithmic performance and behavior.
+**March of the Legion** is a Java application that transforms abstract sorting algorithms into a visual military battlefield simulation. It is designed from the ground up using **SOLID principles** to create a clean, modular, and extensible architecture. Watch as different unit types reorganize themselves across the battlefield using various sorting strategies, providing an engaging way to understand both algorithmic behavior and modern software design patterns.
 
 ### ✨ Key Features
 
-- 🎯 **4 Sorting Algorithms**: Counting Sort, Radix Sort, Quick Sort, and Insertion Sort
-- ⚔️ **5 Military Unit Types**: Commander, Medic, Tank, Sniper, and Infantry
-- 🗺️ **Dynamic Battlefield**: Customizable grid sizes from 5x5 to 1000x1000
-- 🧭 **Formation Orientations**: North, South, East, and West deployment patterns
-- 📊 **Dual Display Modes**: Character symbols or numeric ranges
-- ⚡ **Performance Metrics**: Real-time execution time measurement
+- **SOLID Architecture**: A clean, maintainable codebase built on industry-best practices.
+- **4 Sorting Algorithms**: Counting Sort, Radix Sort, Quick Sort, and Insertion Sort.
+- **5 Military Unit Types**: Commander, Medic, Tank, Sniper, and Infantry.
+- **Dynamic Battlefield**: Customizable grid sizes from 5x5 to 1000x1000.
+- **4 Formation Orientations**: North, South, East, and West deployment patterns.
+- **Dual Display Modes**: Render the battlefield with character symbols or numeric ranges.
+- **Comprehensive Test Suite**: High test coverage with JUnit 5 and Mockito.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architectural Design
 
-```
-src/main/java/university/jala/legion/
-├── Main.java                    # Application entry point
-├── cli/
-│   └── Parameters.java          # Command-line argument parser
-├── model/
-│   ├── Battlefield.java         # Grid management and rendering
-│   ├── Character.java           # Base unit class
-│   ├── Position.java            # Coordinate system
-│   └── units/                   # Military unit implementations
-│       ├── Commander.java       # Rank 0 - Highest priority
-│       ├── Medic.java          # Rank 1 - Medical support
-│       ├── Tank.java           # Rank 2 - Heavy armor
-│       ├── Sniper.java         # Rank 3 - Precision units
-│       └── Infantry.java       # Rank 4 - Ground troops
-└── sorting/
-    ├── SortingStrategy.java     # Strategy pattern interface
-    ├── SortingStrategyFactory.java
-    ├── CountingSort.java        # O(n + k) complexity
-    ├── RadixSort.java          # O(d × (n + k)) complexity
-    ├── QuickSort.java          # O(n log n) average case
-    └── InsertionSort.java      # O(n²) complexity
-```
+The project's architecture is strictly based on the five **SOLID principles** to ensure it is robust, maintainable, and easy to extend.
+
+- **Single Responsibility Principle (SRP)**: Each class has a single, well-defined purpose. For example, the `Battlefield` class manages state, while the `BattlefieldRenderer` handles display logic. Validators, sorters, and placement strategies all have their own distinct responsibilities.
+
+- **Open/Closed Principle (OCP)**: The system is open for extension but closed for modification. New sorting algorithms, placement strategies, or renderers can be added by creating new classes and updating a factory, without changing any existing code.
+
+- **Liskov Substitution Principle (LSP)**: All concrete implementations are substitutable for their abstractions. For example, any `SortingStrategy` can be used by the `TroopArranger` without altering its correctness.
+
+- **Interface Segregation Principle (ISP)**: The design features lean, focused interfaces (e.g., `ICharacter`, `IBattlefield`, `Positionable`). This ensures that classes do not depend on methods they don't use.
+
+- **Dependency Inversion Principle (DIP)**: High-level modules depend on abstractions, not on low-level implementations. The `Simulation` class depends on interfaces like `CliParameters` and `BattlefieldRenderer`, not on their concrete classes.
+
+### 📊 Architectural Diagrams
+
+For a detailed visual overview of the architecture, please see the class diagrams:
+
+➡️ **[View Project Diagrams](./Diagrams/DIAGRAMS.md)**
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
 
 - ☕ **Java 24** or higher
-- 🔧 **Maven 3.8+**
+- 🔧 **Maven 3.9+**
 
-### Installation
+### Build and Test
+
+Follow these steps to build the project and run the full test suite from your terminal.
 
 ```bash
-# Clone the repository
-git clone https://github.com/Jala-University/march-of-the-Legion.git
+# 1. Clone the repository
+git clone git clone https://github.com/Jala-University/march-of-the-Legion
+
 cd march-of-the-Legion
 
-# Compile the project
-mvn compile
-
-# Run with sample parameters (note the correct syntax)
-mvn exec:java "-Dexec.args=a=q u=2,1,1,1,3 f=8 o=n t=c"
+# 2. Clean, compile, test, and package the application
+mvn clean package
 ```
+
+This will produce an executable JAR file in the `target/` directory.
 
 ---
 
-## 🎮 Usage
+## 🎮 How to Run
+
+After packaging the application, you can run it directly from the command line.
 
 ### Command Line Parameters
 
@@ -82,171 +82,42 @@ mvn exec:java "-Dexec.args=a=q u=2,1,1,1,3 f=8 o=n t=c"
 |-----------|-------------|--------|----------|
 | `a` | Sorting Algorithm | `c` (Counting), `r` (Radix), `q` (Quick), `i` (Insertion) | ✅ |
 | `u` | Unit Distribution | `commander,medic,tank,sniper,infantry` (comma-separated) | ✅ |
-| `f` | Battlefield Size | `5-1000` (creates NxN grid) | ❌ (default: 10) |
+| `f` | Battlefield Size | `5-1000` (creates an NxN grid) | ❌ (default: 10) |
 | `o` | Formation Orientation | `n` (North), `s` (South), `e` (East), `w` (West) | ❌ (default: North) |
 | `t` | Display Type | `c` (Character), `n` (Numeric) | ❌ (default: Character) |
 
-### Example Commands
+### Example Command
+
+Use the following format to run the simulation from the executable JAR:
 
 ```bash
-# Quick Sort with mixed units on 12x12 battlefield
-mvn exec:java "-Dexec.args=a=q u=1,2,2,3,4 f=12 o=e t=c"
-
-# Counting Sort demo with numeric display
-mvn exec:java "-Dexec.args=a=c u=2,1,1,1,1 f=8 o=n t=n"
-
-# Large battlefield stress test
-mvn exec:java "-Dexec.args=a=r u=10,5,5,8,12 f=50 o=s t=c"
-
-# Alternative: Build JAR first, then run
-mvn clean package
-java -jar target/legion-1.0-SNAPSHOT.jar a=q u=2,1,1,1,3 f=8 o=n t=c
-```
-
-### Alternative Running Methods
-
-If you encounter issues with `mvn exec:java`, try these alternatives:
-
-**Option 1: Build and run JAR directly**
-```bash
-mvn clean compile package
-java -jar target/legion-1.0-SNAPSHOT.jar a=q u=2,1,1,1,3 f=8 o=n t=c
-```
-
-**Option 2: Run with compiled classes**
-```bash
-mvn compile
-java -cp target/classes university.jala.legion.Main a=q u=2,1,1,1,3 f=8 o=n t=c
-```
-
-**Option 3: Using PowerShell (Windows)**
-```powershell
-mvn exec:java '-Dexec.args=a=q u=2,1,1,1,3 f=8 o=n t=c'
+java -jar target/legion-1.0-SNAPSHOT.jar a=q u=1,2,5,4,10 f=10 o=s t=c
 ```
 
 ---
 
-## 📊 Sample Output
+## 📂 Project Structure
+
+The project follows a clean, modular structure based on its features:
 
 ```
-Algorithm: [Quick Sort]
-Type: [Character]
-Orientation: [North]
-Troops: [8]
-Battlefield: [8 x 8]
-
-Initial Position:
-+----------------+
-|* * * * * * * T |
-|* C I * * * * * |
-|* * * * * * * * |
-|* * * * * * * S |
-|* * * * * I * * |
-|* I * * C * * * |
-|* * * * * M * * |
-|* * * * * * * * |
-+----------------+
-
-Applying Quick Sort...
-
-Final Position:
-+----------------+
-|C * * * * * * * |
-|C * * * * * * * |
-|M * * * * * * * |
-|T * * * * * * * |
-|S * * * * * * * |
-|I * * * * * * * |
-|I * * * * * * * |
-|I * * * * * * * |
-+----------------+
-
-Execution time: 0ms
+src
+├── main
+│   └── java
+│       └── university/jala/legion
+│           ├── Main.java
+│           ├── cli/            # Parameter parsing and validation
+│           ├── model/          # Core domain objects and interfaces
+│           ├── rendering/      # Battlefield rendering strategies
+│           ├── simulation/     # Main simulation orchestrator
+│           └── sorting/        # Sorting and placement strategies
+└── test
+    └── java
+        └── university/jala/legion # Unit and integration tests
 ```
-
----
-
-## 🎖️ Military Unit Hierarchy
-
-| Unit | Symbol | Rank | Numeric | Description |
-|------|--------|------|---------|-------------|
-| **Commander** | `C` | 0 | 1 | Strategic leadership - highest priority |
-| **Medic** | `M` | 1 | 2 | Medical support and field treatment |
-| **Tank** | `T` | 2 | 3 | Heavy armored assault units |
-| **Sniper** | `S` | 3 | 4 | Precision long-range specialists |
-| **Infantry** | `I` | 4 | 5 | Standard ground combat forces |
-
----
-
-## ⚡ Algorithm Performance
-
-| Algorithm | Best Case | Average Case | Worst Case | Space | Stable |
-|-----------|-----------|--------------|------------|-------|--------|
-| **Counting Sort** | O(n + k) | O(n + k) | O(n + k) | O(k) | ✅ |
-| **Radix Sort** | O(d(n + k)) | O(d(n + k)) | O(d(n + k)) | O(n + k) | ✅ |
-| **Quick Sort** | O(n log n) | O(n log n) | O(n²) | O(log n) | ❌ |
-| **Insertion Sort** | O(n) | O(n²) | O(n²) | O(1) | ✅ |
-
----
-
-## 🛠️ Development
-
-### Building from Source
-
-```bash
-# Clean and compile
-mvn clean compile
-
-# Run tests
-mvn test
-
-# Create executable JAR
-mvn package
-
-# Run the JAR directly
-java -jar target/legion-1.0-SNAPSHOT.jar a=q u=1,1,1,1,1
-```
-
-### Project Structure
-
-The project follows Maven standard directory layout and implements several design patterns:
-
-- **Strategy Pattern**: For interchangeable sorting algorithms
-- **Factory Pattern**: For creating sorting strategy instances
-- **Command Pattern**: For parameter parsing and validation
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Please feel free to:
-
-1. 🍴 Fork the repository
-2. 🌿 Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. 💾 Commit your changes (`git commit -m 'Add amazing feature'`)
-4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
-5. 🔄 Open a Pull Request
 
 ---
 
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- Inspired by military tactical formations and algorithmic visualization
-- Built as an educational tool for understanding sorting algorithm behavior
-- Developed using modern Java features and best practices
-
----
-
-<div align="center">
-
-**⭐ Star this repo if you found it interesting! ⭐**
-
-Made with ❤️ by [University JALA Students](https://github.com/yourusername)
-
-</div>

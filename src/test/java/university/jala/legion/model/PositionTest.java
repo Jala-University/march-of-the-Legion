@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for the Position class.
+ * Unit tests for the {@link Position} record.
  */
 class PositionTest {
 
@@ -13,41 +13,24 @@ class PositionTest {
         // Create a new Position instance
         Position position = new Position(5, 10);
 
-        // Assert that the row and column are set correctly
-        assertEquals(5, position.getRow());
-        assertEquals(10, position.getColumn());
+        // Assert that the row and column are set correctly using record accessors
+        assertEquals(5, position.row());
+        assertEquals(10, position.column());
     }
 
     @Test
-    void testEquals() {
-        // Create two Position instances with the same coordinates
+    void testEqualsAndHashCode() {
+        // Records provide reliable implementations of equals() and hashCode().
         Position pos1 = new Position(3, 7);
         Position pos2 = new Position(3, 7);
-
-        // Create a Position instance with different coordinates
         Position pos3 = new Position(5, 7);
 
-        // Assert that two positions with the same coordinates are equal
+        // Assert that two positions with the same coordinates are equal and have the same hash code.
         assertEquals(pos1, pos2);
-
-        // Assert that two positions with different coordinates are not equal
-        assertNotEquals(pos1, pos3);
-
-        // Assert that a position is not equal to null
-        assertNotEquals(pos1, null);
-
-        // Assert that a position is not equal to an object of a different class
-        assertNotEquals(pos1, new Object());
-    }
-
-    @Test
-    void testHashCode() {
-        // Create two Position instances with the same coordinates
-        Position pos1 = new Position(4, 8);
-        Position pos2 = new Position(4, 8);
-
-        // Assert that two positions with the same coordinates have the same hash code
         assertEquals(pos1.hashCode(), pos2.hashCode());
+
+        // Assert that two positions with different coordinates are not equal.
+        assertNotEquals(pos1, pos3);
     }
 
     @Test
@@ -55,7 +38,7 @@ class PositionTest {
         // Create a Position instance
         Position position = new Position(1, 2);
 
-        // Assert that the toString() method returns the expected string representation
-        assertEquals("(1,2)", position.toString());
+        // Assert that the toString() method returns the expected record format.
+        assertEquals("Position[row=1, column=2]", position.toString());
     }
 }

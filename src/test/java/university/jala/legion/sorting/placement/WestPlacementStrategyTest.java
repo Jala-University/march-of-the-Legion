@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for the {@link WestPlacementStrategy} class.
@@ -42,9 +43,10 @@ class WestPlacementStrategyTest {
 
         strategy.place(units, 10);
 
-        assertEquals(new Position(0, 9), commander.getPosition());
-        assertEquals(new Position(0, 8), medic1.getPosition());
-        assertEquals(new Position(1, 8), medic2.getPosition());
+        // Verify that setPosition was called with the correct coordinates for each unit.
+        verify(commander).setPosition(new Position(0, 9));
+        verify(medic1).setPosition(new Position(0, 8));
+        verify(medic2).setPosition(new Position(1, 8));
     }
 
     @Test
