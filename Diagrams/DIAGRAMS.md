@@ -72,7 +72,10 @@ package "model" {
         # position: Position
     }
 
-    record Position(row: int, column: int)
+    class Position <<record>> {
+        + row: int
+        + column: int
+    }
 }
 
 package "model.interfaces" {
