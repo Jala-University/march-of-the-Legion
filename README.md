@@ -60,8 +60,7 @@ Follow these steps to build the project and run the full test suite from your te
 
 ```bash
 # 1. Clone the repository
-git clone git clone https://github.com/Jala-University/march-of-the-Legion
-
+git clone https://github.com/Jala-University/march-of-the-Legion.git
 cd march-of-the-Legion
 
 # 2. Clean, compile, test, and package the application
