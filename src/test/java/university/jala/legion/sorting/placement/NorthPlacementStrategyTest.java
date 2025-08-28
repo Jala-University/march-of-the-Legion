@@ -64,17 +64,17 @@ class NorthPlacementStrategyTest {
     }
 
     @Test
-    void testNotEnoughColumnsForUnitsThrowsException() {
-        // It should throw an exception if a rank group exceeds the battlefield width.
+    void testNotEnoughSpaceWhenWrappingThrowsException() {
+        // It should throw an exception if a rank group wraps but still runs out of space.
         List<ICharacter> units = new ArrayList<>();
         units.add(createMockUnit(0));
         units.add(createMockUnit(0));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            strategy.place(units, 1); // Only one column available
+            strategy.place(units, 1); // Only one column available, forcing a wrap that fails
         });
 
-        assertEquals("A unit group exceeds the battlefield width.", exception.getMessage());
+        assertEquals("Not enough space on the battlefield for all units.", exception.getMessage());
     }
 
     @Test
