@@ -1,21 +1,17 @@
 package university.jala.legion.sorting;
 
-import university.jala.legion.model.Character;
+import university.jala.legion.model.interfaces.ICharacter;
 import java.util.List;
 
 /**
- * Interface for sorting strategies to arrange military units.
+ * Defines the contract for sorting strategies that arrange military units by rank.
+ * This interface allows different sorting algorithms to be used interchangeably.
  */
 public interface SortingStrategy {
     /**
-     * Sorts the given list of units by rank.
-     * @param units The list of units to sort
+     * Sorts the given list of units in place, primarily by their rank.
+     *
+     * @param units The list of {@link ICharacter} units to be sorted.
      */
-    void sort(List<Character> units);
-
-    /**
-     * Gets the name of the sorting algorithm.
-     * @return The algorithm name
-     */
-    String getName();
+    void sort(List<ICharacter> units);
 }

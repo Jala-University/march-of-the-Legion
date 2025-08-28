@@ -1,70 +1,56 @@
 package university.jala.legion.sorting;
 
-import university.jala.legion.model.Character;
-import java.util.List;
+import university.jala.legion.model.interfaces.ICharacter;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
- * Implements the Radix Sort algorithm.
- * Radix sort is a non-comparative integer sorting algorithm that sorts data
- * with integer keys by grouping keys by the individual digits which share the same
- * significant position and value.
- * <p>
- * This implementation assumes the 'Character' class has a getRank() method
- * that returns an integer rank.
+ * Implements the Radix Sort algorithm to sort characters by their rank.
+ * Radix sort is a non-comparative sorting algorithm that processes integer keys
+ * by grouping them by individual digits sharing the same significant position.
  */
 public class RadixSort implements SortingStrategy {
 
     @Override
-    public void sort(List<Character> units) {
+    public void sort(List<ICharacter> units) {
         if (units == null || units.size() <= 1) {
             return;
         }
 
-        // Find the maximum rank to know the number of digits
-        int maxRank = 0;
-        for (Character unit : units) {
-            if (unit.getRank() > maxRank) {
-                maxRank = unit.getRank();
-            }
-        }
+        int maxRank = units.stream()
+                .mapToInt(ICharacter::getRank)
+                .max()
+                .orElse(0);
 
-        // Perform counting sort for every digit, starting from the least significant digit
         for (int exp = 1; maxRank / exp > 0; exp *= 10) {
             countingSortByDigit(units, exp);
         }
     }
 
-    private void countingSortByDigit(List<Character> units, int exp) {
+    private void countingSortByDigit(List<ICharacter> units, int exp) {
         int n = units.size();
-        Character[] output = new Character[n];
+        List<ICharacter> output = new ArrayList<>(Collections.nCopies(n, null));
         int[] count = new int[10];
 
-        // Store count of occurrences in count[]
-        for (int i = 0; i < n; i++) {
-            count[(units.get(i).getRank() / exp) % 10]++;
+        for (ICharacter unit : units) {
+            count[(unit.getRank() / exp) % 10]++;
         }
 
-        // Change count[i] so that it contains the actual position of the digit
         for (int i = 1; i < 10; i++) {
             count[i] += count[i - 1];
         }
 
-        // Build the output array
         for (int i = n - 1; i >= 0; i--) {
-            int digit = (units.get(i).getRank() / exp) % 10;
-            output[count[digit] - 1] = units.get(i);
+            ICharacter unit = units.get(i);
+            int digit = (unit.getRank() / exp) % 10;
+            output.set(count[digit] - 1, unit);
             count[digit]--;
         }
 
-        // Copy the output array to the original list
         for (int i = 0; i < n; i++) {
-            units.set(i, output[i]);
+            units.set(i, output.get(i));
         }
-    }
-
-    @Override
-    public String getName() {
-        return "Radix Sort";
     }
 }
