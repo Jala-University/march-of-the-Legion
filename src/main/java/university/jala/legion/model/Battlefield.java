@@ -1,145 +1,96 @@
 package university.jala.legion.model;
 
+import university.jala.legion.model.interfaces.IBattlefield;
+import university.jala.legion.model.interfaces.ICharacter;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 /**
- * Represents the battlefield grid and manages unit placement.
+ * Represents the battlefield grid and manages the state of units upon it.
+ * This class is responsible for maintaining the grid and the list of units,
+ * but delegates rendering and placement logic to other components.
  */
-public class Battlefield {
+public class Battlefield implements IBattlefield {
     private final int size;
-    private final Character[][] grid;
-    private final List<Character> units;
-    private final Random random;
+    private final ICharacter[][] grid;
+    private final List<ICharacter> units;
 
+    /**
+     * Constructs a new Battlefield with a specified size.
+     *
+     * @param size The size of one dimension of the N x N grid.
+     */
     public Battlefield(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Battlefield size must be positive.");
+        }
         this.size = size;
-        this.grid = new Character[size][size];
+        this.grid = new ICharacter[size][size];
         this.units = new ArrayList<>();
-        this.random = new Random();
     }
 
     /**
-     * Places units randomly on the battlefield.
-     * @param units List of units to place
+     * Sets the troops on the battlefield, clearing any previous state.
+     * The positions of the units in the list are used to place them on the grid.
+     *
+     * @param troops The list of troops to place on the battlefield.
      */
-    public void placeUnitsRandomly(List<Character> units) {
+    public void setUnits(List<ICharacter> troops) {
+        clear();
+        this.units.addAll(troops);
+        for (ICharacter unit : this.units) {
+            if (unit.getPosition() != null) {
+                placeUnitOnGrid(unit);
+            }
+        }
+    }
+
+    private void placeUnitOnGrid(ICharacter unit) {
+        Position position = unit.getPosition();
+        if (position.row() >= 0 && position.row() < size &&
+            position.column() >= 0 && position.column() < size) {
+            if (grid[position.row()][position.column()] == null) {
+                grid[position.row()][position.column()] = unit;
+            } else {
+                // Handle position conflict if necessary, e.g., throw an exception
+            }
+        }
+    }
+
+    /**
+     * Clears the battlefield, removing all units and resetting the grid.
+     */
+    public void clear() {
         this.units.clear();
-        this.units.addAll(units);
-        
-        // Clear the grid
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 grid[i][j] = null;
             }
         }
+    }
 
-        // Place each unit randomly
-        for (Character unit : units) {
-            Position position;
-            do {
-                position = new Position(random.nextInt(size), random.nextInt(size));
-            } while (!isPositionEmpty(position));
+    @Override
+    public int getSize() {
+        return size;
+    }
 
-            placeUnit(unit, position);
+    @Override
+    public ICharacter getUnitAt(int row, int column) {
+        if (row >= 0 && row < size && column >= 0 && column < size) {
+            return grid[row][column];
         }
-    }
-
-    private boolean isPositionEmpty(Position position) {
-        return grid[position.getRow()][position.getColumn()] == null;
-    }
-
-    private void placeUnit(Character unit, Position position) {
-        grid[position.getRow()][position.getColumn()] = unit;
-        unit.setPosition(position);
+        return null;
     }
 
     /**
-     * Renders the battlefield in ASCII format.
-     * @param useNumeric Whether to use numeric representation
-     * @return String representation of the battlefield
+     * Returns an unmodifiable view of the list of units on the battlefield.
+     *
+     * @return An unmodifiable list of units.
      */
-    public String render(boolean useNumeric) {
-        StringBuilder sb = new StringBuilder();
-        
-        // Add top border
-        sb.append("+");
-        for (int i = 0; i < size; i++) sb.append("--");
-        sb.append("+\n");
-
-        // Add grid content
-        for (int i = 0; i < size; i++) {
-            sb.append("|");
-            for (int j = 0; j < size; j++) {
-                Character unit = grid[i][j];
-                if (unit == null) {
-                    sb.append("* ");
-                } else {
-                    if (useNumeric) {
-                        sb.append(unit.getNumericRange()).append(" ");
-                    } else {
-                        sb.append(unit.getSymbol()).append(" ");
-                    }
-                }
-            }
-            sb.append("|\n");
-        }
-
-        // Add bottom border
-        sb.append("+");
-        for (int i = 0; i < size; i++) sb.append("--");
-        sb.append("+");
-
-        return sb.toString();
-    }
-
-    public List<Character> getUnits() {
-        return new ArrayList<>(units);
-    }
-
-    public void applyNewPositions(List<Character> sortedUnits, String orientation) {
-        // Clear the grid
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                grid[i][j] = null;
-            }
-        }
-
-        int unitIndex = 0;
-        switch (orientation.toLowerCase()) {
-            case "n": // North - top to bottom
-                for (int j = 0; j < size && unitIndex < sortedUnits.size(); j++) {
-                    for (int i = 0; i < size && unitIndex < sortedUnits.size(); i++) {
-                        Position pos = new Position(i, j);
-                        placeUnit(sortedUnits.get(unitIndex++), pos);
-                    }
-                }
-                break;
-            case "s": // South - bottom to top
-                for (int j = 0; j < size && unitIndex < sortedUnits.size(); j++) {
-                    for (int i = size - 1; i >= 0 && unitIndex < sortedUnits.size(); i--) {
-                        Position pos = new Position(i, j);
-                        placeUnit(sortedUnits.get(unitIndex++), pos);
-                    }
-                }
-                break;
-            case "e": // East - left to right
-                for (int i = 0; i < size && unitIndex < sortedUnits.size(); i++) {
-                    for (int j = 0; j < size && unitIndex < sortedUnits.size(); j++) {
-                        Position pos = new Position(i, j);
-                        placeUnit(sortedUnits.get(unitIndex++), pos);
-                    }
-                }
-                break;
-            case "w": // West - right to left
-                for (int i = 0; i < size && unitIndex < sortedUnits.size(); i++) {
-                    for (int j = size - 1; j >= 0 && unitIndex < sortedUnits.size(); j--) {
-                        Position pos = new Position(i, j);
-                        placeUnit(sortedUnits.get(unitIndex++), pos);
-                    }
-                }
-                break;
-        }
+    public List<ICharacter> getUnits() {
+        return Collections.unmodifiableList(units);
     }
 }
